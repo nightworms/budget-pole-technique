@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pôle Technique — Suivi Budgétaire</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f2ed; --surface: #ffffff; --surface2: #edeae3;
+    --border: rgba(0,0,0,0.07); --border-med: rgba(0,0,0,0.13);
+    --text: #1a1916; --text-muted: #6b6760; --text-faint: #a09c96;
+    --accent: #2d4a3e; --accent2: #3d6b5a;
+    --ok: #1a5c2e; --ok-bg: #e2f2e7; --ok-mid: #2d9a5a;
+    --warn: #7a4f00; --warn-bg: #fdf2d8; --warn-mid: #d4860a;
+    --danger: #7a1a1a; --danger-bg: #fde6e6; --danger-mid: #c94040;
+    --blue: #1a3a5c; --blue-bg: #e2edf7; --blue-mid: #3a6fa8;
+    --font-h: 'Syne', sans-serif; --font-b: 'DM Sans', sans-serif; --font-m: 'DM Mono', monospace;
+    --r: 10px; --r-lg: 14px;
+  }
+  body { font-family: var(--font-b); background: var(--bg); color: var(--text); min-height: 100vh; }
+  .site-header { background: var(--accent); padding: 0 32px; display: flex; align-items: stretch; justify-content: space-between; gap: 24px; }
+  .header-brand { padding: 20px 0; }
+  .header-brand h1 { font-family: var(--font-h); font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.02em; line-height: 1.1; }
+  .header-brand p { font-family: var(--font-m); font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; margin-top: 4px; }
+  .header-meta { display: flex; align-items: center; gap: 16px; }
+  .header-tag { font-family: var(--font-m); font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; }
+  .header-tag span { color: rgba(255,255,255,0.85); }
+  .nav-bar { background: var(--surface); border-bottom: 1px solid var(--border-med); display: flex; gap: 2px; padding: 8px 32px; position: sticky; top: 0; z-index: 100; }
+  .nav-btn { font-family: var(--font-b); font-size: 13px; font-weight: 500; color: var(--text-muted); background: transparent; border: none; padding: 7px 16px; border-radius: 7px; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { background: var(--surface2); color: var(--accent); font-weight: 600; }
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .badge-count { background: var(--danger-mid); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600; }
+  .page { display: none; padding: 28px 32px 48px; max-width: 1300px; margin: 0 auto; }
+  .page.active { display: block; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px 18px; }
+  .kpi-label { font-size: 10px; font-weight: 500; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+  .kpi-val { font-family: var(--font-h); font-size: 24px; font-weight: 700; line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--text-faint); margin-top: 5px; }
+  .kpi.danger .kpi-val { color: var(--danger-mid); }
+  .kpi.warn .kpi-val { color: var(--warn-mid); }
+  .kpi.ok .kpi-val { color: var(--ok-mid); }
+  .kpi.blue .kpi-val { color: var(--blue-mid); }
+  .section-title { font-family: var(--font-h); font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 24px 0 12px; }
+  .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; }
+  .chart-card h3 { font-family: var(--font-h); font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .chart-wrap { position: relative; }
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead { background: var(--accent); }
+  th { padding: 10px 14px; text-align: left; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf7; }
+  tr.total-row td { background: var(--surface2); font-weight: 600; border-top: 2px solid var(--border-med); }
+  .code { font-family: var(--font-m); font-size: 11px; color: var(--blue-mid); font-weight: 500; }
+  .type-badge { font-size: 10px; color: var(--text-faint); font-style: italic; }
+  .num { font-family: var(--font-m); font-size: 11px; text-align: right; }
+  .num.neg { color: var(--danger-mid); font-weight: 500; }
+  .num.ok { color: var(--ok-mid); }
+  .sbadge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .sbadge.ok { background: var(--ok-bg); color: var(--ok); }
+  .sbadge.warn { background: var(--warn-bg); color: var(--warn); }
+  .sbadge.danger { background: var(--danger-bg); color: var(--danger); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot.ok { background: var(--ok-mid); }
+  .dot.warn { background: var(--warn-mid); }
+  .dot.danger { background: var(--danger-mid); }
+  .prog-wrap { display: flex; align-items: center; gap: 8px; }
+  .prog-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; min-width: 60px; }
+  .prog-fill { height: 100%; border-radius: 3px; }
+  .prog-fill.ok { background: var(--ok-mid); }
+  .prog-fill.warn { background: var(--warn-mid); }
+  .prog-fill.danger { background: var(--danger-mid); }
+  .prog-pct { font-family: var(--font-m); font-size: 11px; color: var(--text-muted); min-width: 38px; text-align: right; }
+  .alerts-grid { display: grid; gap: 10px; }
+  .alert-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; }
+  .alert-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+  .alert-icon.danger { background: var(--danger-bg); color: var(--danger-mid); }
+  .alert-icon.warn { background: var(--warn-bg); color: var(--warn-mid); }
+  .alert-icon.info { background: var(--blue-bg); color: var(--blue-mid); }
+  .alert-body { flex: 1; }
+  .alert-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .alert-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .priority { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+  .priority.high { background: var(--danger-bg); color: var(--danger); }
+  .priority.med { background: var(--warn-bg); color: var(--warn); }
+  .priority.low { background: var(--blue-bg); color: var(--blue); }
+  .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .split-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px 20px; }
+  .split-title { font-family: var(--font-h); font-size: 11px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; }
+  .split-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .split-row:last-child { border: none; }
+  .split-key { color: var(--text-muted); }
+  .split-val { font-family: var(--font-m); font-weight: 500; }
+  .split-val.neg { color: var(--danger-mid); }
+  .split-val.ok { color: var(--ok-mid); }
+  .split-val.warn { color: var(--warn-mid); }
+  .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .guide-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+  .guide-header { background: var(--accent); padding: 12px 16px; font-family: var(--font-h); font-size: 12px; font-weight: 700; color: #fff; }
+  .guide-item { padding: 10px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+  .guide-item:last-child { border: none; }
+  .guide-num { font-family: var(--font-m); font-size: 10px; font-weight: 500; color: var(--accent2); background: #e8f0ec; border-radius: 4px; padding: 2px 7px; flex-shrink: 0; align-self: flex-start; margin-top: 1px; }
+  .guide-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .guide-text strong { color: var(--text); font-weight: 500; }
+  footer { text-align: center; padding: 20px 32px; font-family: var(--font-m); font-size: 10px; color: var(--text-faint); border-top: 1px solid var(--border); margin-top: 40px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+  .legend-sq { width: 10px; height: 10px; border-radius: 2px; }
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .charts-row, .split-grid, .guide-grid { grid-template-columns: 1fr; }
+    .page { padding: 20px 16px 40px; }
+    .nav-bar { padding: 8px 16px; overflow-x: auto; }
+    .site-header { padding: 0 16px; }
+  }
+  @media (max-width: 600px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-brand">
+    <h1>Pôle Technique — Suivi Budgétaire</h1>
+    <p>DIRECTION DES ÉQUIPEMENTS &amp; DES UNITÉS · DEDU / DRMU</p>
+  </div>
+  <div class="header-meta">
+    <div class="header-tag">Maj&nbsp;<span>21/08/2025</span></div>
+    <div class="header-tag">Source&nbsp;<span>Google Sheets</span></div>
+  </div>
+</header>
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="showPage('tableau',this)"><span class="nav-dot" style="background:var(--ok-mid)"></span>Vue d'ensemble</button>
+  <button class="nav-btn" onclick="showPage('lignes',this)"><span class="nav-dot" style="background:var(--blue-mid)"></span>Lignes budgétaires</button>
+  <button class="nav-btn" onclick="showPage('alertes',this)"><span class="nav-dot" style="background:var(--danger-mid)"></span>Alertes <span class="badge-count">6</span></button>
+  <button class="nav-btn" onclick="showPage('guide',this)"><span class="nav-dot" style="background:var(--warn-mid)"></span>Organisation</button>
+</nav>
+
+<main class="page active" id="page-tableau">
+  <div class="kpi-grid">
+    <div class="kpi blue"><div class="kpi-label">Budget fonctionnement</div><div class="kpi-val">580 k€</div><div class="kpi-sub">5 lignes · DEDU + DRMU</div></div>
+    <div class="kpi blue"><div class="kpi-label">Budget investissement</div><div class="kpi-val">1 050 k€</div><div class="kpi-sub">4 lignes · DEDU</div></div>
+    <div class="kpi"><div class="kpi-label">Total engagé</div><div class="kpi-val">1 533 k€</div><div class="kpi-sub">sur 1 630 k€ votés</div></div>
+    <div class="kpi warn"><div class="kpi-label">% consommé global</div><div class="kpi-val">94,1%</div><div class="kpi-sub">Seuil critique</div></div>
+    <div class="kpi danger"><div class="kpi-label">Dépassements</div><div class="kpi-val">5 lignes</div><div class="kpi-sub">Action requise</div></div>
+    <div class="kpi warn"><div class="kpi-label">Virement DSB attendu</div><div class="kpi-val">340 k€</div><div class="kpi-sub">DEDU0100 bloqué</div></div>
+  </div>
+  <div class="split-grid">
+    <div class="split-card">
+      <div class="split-title">Fonctionnement — Synthèse</div>
+      <div class="split-row"><span class="split-key">Budget voté</span><span class="split-val">579 700 €</span></div>
+      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val">680 383 €</span></div>
+      <div class="split-row"><span class="split-key">Disponible net</span><span class="split-val neg">–100 683 €</span></div>
+      <div class="split-row"><span class="split-key">Lignes en dépassement</span><span class="split-val neg">4 / 5</span></div>
+      <div class="split-row"><span class="split-key">% consommé moyen</span><span class="split-val warn">117,4%</span></div>
+    </div>
+    <div class="split-card">
+      <div class="split-title">Investissement — Synthèse</div>
+      <div class="split-row"><span class="split-key">Budget voté</span><span class="split-val">1 050 263 €</span></div>
+      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val">853 092 €</span></div>
+      <div class="split-row"><span class="split-key">Disponible cumulé</span><span class="split-val ok">+197 171 €</span></div>
+      <div class="split-row"><span class="split-key">Lignes à surveiller</span><span class="split-val warn">2 / 4</span></div>
+      <div class="split-row"><span class="split-key">Demandes BS en cours</span><span class="split-val warn">+130 000 €</span></div>
+    </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Consommation par ligne budgétaire</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-sq" style="background:var(--ok-mid)"></div>Sain (&lt;75%)</div>
+        <div class="legend-item"><div class="legend-sq" style="background:var(--warn-mid)"></div>Attention (75–99%)</div>
+        <div class="legend-item"><div class="legend-sq" style="background:var(--danger-mid)"></div>Dépassé (&gt;100%)</div>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="barChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Répartition du budget voté</h3>
+      <div class="chart-wrap" style="height:200px;margin-bottom:12px"><canvas id="donutChart"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+        <div class="legend-item"><div class="legend-sq" style="background:#3a6fa8"></div>Fonctionnement : 580 k€ (36%)</div>
+        <div class="legend-item"><div class="legend-sq" style="background:#2d9a5a"></div>Investissement : 1 050 k€ (64%)</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<main class="page" id="page-lignes">
+  <div class="section-title">Fonctionnement</div>
+  <div class="table-wrap" style="margin-bottom:24px">
+    <table>
+      <thead><tr><th>Code</th><th>Libellé</th><th>Service</th><th style="text-align:right">Budget voté</th><th style="text-align:right">Engagé</th><th style="text-align:right">Disponible</th><th>Consommation</th><th>Statut</th><th>Commentaires</th></tr></thead>
+      <tbody>
+        <tr><td><span class="code">DEDU0084</span></td><td>Entretien réparation bâtiment</td><td><span class="type-badge">DEDU</span></td><td class="num">100 000 €</td><td class="num neg">112 683 €</td><td class="num neg">(12 683 €)</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill danger" style="width:100%"></div></div><span class="prog-pct">112,7%</span></div></td><td><span class="sbadge danger"><span class="dot danger"></span>Dépassé</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Reste 21K à vérifier — décapage et autres travaux</td></tr>
+        <tr><td><span class="code">DEDU0086</span></td><td>Maintenance écoles</td><td><span class="type-badge">DEDU</span></td><td class="num">40 000 €</td><td class="num neg">46 000 €</td><td class="num neg">(6 000 €)</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill danger" style="width:100%"></div></div><span class="prog-pct">115,0%</span></div></td><td><span class="sbadge danger"><span class="dot danger"></span>Dépassé</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Transfert 5K vacances août. Reste 16K à engager.</td></tr>
+        <tr><td><span class="code">DEDU0123</span></td><td>Transport de bien — déménagement</td><td><span class="type-badge">DEDU</span></td><td class="num">102 000 €</td><td class="num">87 000 €</td><td class="num ok">15 000 €</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill warn" style="width:85%"></div></div><span class="prog-pct">85,3%</span></div></td><td><span class="sbadge warn"><span class="dot warn"></span>Attention</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Reste 16K à engager</td></tr>
+        <tr><td><span class="code">DEDU0186</span></td><td>Maintenance équipements chaud/froid</td><td><span class="type-badge">DRMU</span></td><td class="num">307 700 €</td><td class="num neg">378 700 €</td><td class="num neg">(71 000 €)</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill danger" style="width:100%"></div></div><span class="prog-pct">123,1%</span></div></td><td><span class="sbadge danger"><span class="dot danger"></span>Dépassé</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Reste 30K à engager. 20K prévus transport &amp; montage.</td></tr>
+        <tr><td><span class="code">DEDU0191</span></td><td>Conformité gaz</td><td><span class="type-badge">DRMU</span></td><td class="num">30 000 €</td><td class="num neg">56 000 €</td><td class="num neg">(26 000 €)</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill danger" style="width:100%"></div></div><span class="prog-pct">186,7%</span></div></td><td><span class="sbadge danger"><span class="dot danger"></span>Dépassé</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Point finance : reste 0K à engager</td></tr>
+        <tr class="total-row"><td colspan="3"><strong>TOTAL FONCTIONNEMENT</strong></td><td class="num"><strong>579 700 €</strong></td><td class="num neg"><strong>680 383 €</strong></td><td class="num neg"><strong>(100 683 €)</strong></td><td colspan="3"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section-title">Investissement</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Libellé</th><th>Service</th><th style="text-align:right">Budget voté</th><th style="text-align:right">Engagé</th><th style="text-align:right">Disponible</th><th>Consommation</th><th>Statut</th><th>Commentaires</th></tr></thead>
+      <tbody>
+        <tr><td><span class="code">DEDU0100</span></td><td>Installation matériels écoles</td><td><span class="type-badge">DEDU</span></td><td class="num">180 000 €</td><td class="num">179 774 €</td><td class="num ok">226 €</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill warn" style="width:99%"></div></div><span class="prog-pct">99,9%</span></div></td><td><span class="sbadge warn"><span class="dot warn"></span>Attention</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Attente virement DSB 340K€</td></tr>
+        <tr><td><span class="code">DEDU0124</span></td><td>Rideaux — confort thermique</td><td><span class="type-badge">DEDU</span></td><td class="num">37 263 €</td><td class="num">16 318 €</td><td class="num ok">20 945 €</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill ok" style="width:43%"></div></div><span class="prog-pct">43,8%</span></div></td><td><span class="sbadge ok"><span class="dot ok"></span>OK</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Attention consommation signalée</td></tr>
+        <tr><td><span class="code">DEDU0125</span></td><td>Mobilier écoles / restauration</td><td><span class="type-badge">DEDU</span></td><td class="num">300 000 €</td><td class="num">167 000 €</td><td class="num ok">133 000 €</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill ok" style="width:55%"></div></div><span class="prog-pct">55,7%</span></div></td><td><span class="sbadge ok"><span class="dot ok"></span>OK</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Demande au BS +60 000 € en cours</td></tr>
+        <tr><td><span class="code">DEDU0195</span></td><td>Équipements de cuisine</td><td><span class="type-badge">DEDU</span></td><td class="num">533 000 €</td><td class="num">490 000 €</td><td class="num ok">43 000 €</td><td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill warn" style="width:91%"></div></div><span class="prog-pct">91,9%</span></div></td><td><span class="sbadge warn"><span class="dot warn"></span>Attention</span></td><td style="font-size:11px;color:var(--text-muted);font-style:italic">Demande au BS +70 000 € en cours</td></tr>
+        <tr class="total-row"><td colspan="3"><strong>TOTAL INVESTISSEMENT</strong></td><td class="num"><strong>1 050 263 €</strong></td><td class="num"><strong>853 092 €</strong></td><td class="num ok"><strong>197 171 €</strong></td><td colspan="3"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<main class="page" id="page-alertes">
+  <div class="section-title">Dépassements budgétaires — Action immédiate</div>
+  <div class="alerts-grid" style="margin-bottom:24px">
+    <div class="alert-card"><div class="alert-icon danger">!</div><div class="alert-body"><div class="alert-title">DEDU0186 — Maintenance équipements chaud/froid <span class="priority high">Priorité haute</span></div><div class="alert-desc">Dépassement de <strong>–71 000 €</strong> sur 307 700 €. Consommation à 123,1%. Reste 30K à engager. 20K prévus transport et montage. → Initier une demande de virement interne en urgence.</div></div></div>
+    <div class="alert-card"><div class="alert-icon danger">!</div><div class="alert-body"><div class="alert-title">DEDU0191 — Conformité gaz <span class="priority high">Priorité haute</span></div><div class="alert-desc">Dépassement de <strong>–26 000 €</strong> sur 30 000 €. Consommation à 186,7%. Point finance confirme 0K restant. → Bloquer tout nouvel engagement immédiatement.</div></div></div>
+    <div class="alert-card"><div class="alert-icon danger">!</div><div class="alert-body"><div class="alert-title">DEDU0084 — Entretien réparation bâtiment <span class="priority high">Priorité haute</span></div><div class="alert-desc">Dépassement de <strong>–12 683 €</strong> sur 100 000 €. Reste 21K à vérifier (décapage). → Chiffrer les travaux restants et formuler une demande de budget supplémentaire.</div></div></div>
+    <div class="alert-card"><div class="alert-icon danger">!</div><div class="alert-body"><div class="alert-title">DEDU0086 — Maintenance écoles <span class="priority high">Priorité haute</span></div><div class="alert-desc">Dépassement de <strong>–6 000 €</strong> sur 40 000 €. Transfert 5K effectué vacances août. Reste 16K à engager. → Vérifier si un transfert de budget est possible.</div></div></div>
+  </div>
+  <div class="section-title">Points d'attention opérationnels</div>
+  <div class="alerts-grid">
+    <div class="alert-card"><div class="alert-icon warn">~</div><div class="alert-body"><div class="alert-title">DEDU0100 — Matériels écoles <span class="priority med">Attention</span></div><div class="alert-desc">Budget quasi nul : <strong>226 € restants</strong>. En attente du virement DSB de <strong>340 000 €</strong>. → Relancer formellement le service DSB avec accusé de réception.</div></div></div>
+    <div class="alert-card"><div class="alert-icon warn">~</div><div class="alert-body"><div class="alert-title">DEDU0195 — Équipements de cuisine <span class="priority med">Attention</span></div><div class="alert-desc">91,9% consommé (43 000 € restants). Seuil 90% atteint. Demande +70 000 € au BS en cours. → Anticiper l'engagement des 43K restants.</div></div></div>
+    <div class="alert-card"><div class="alert-icon info">i</div><div class="alert-body"><div class="alert-title">DEDU0125 &amp; DEDU0195 — Demandes BS <span class="priority low">Suivi</span></div><div class="alert-desc">+60 000 € (mobilier) et +70 000 € (cuisine) en cours. Total : <strong>+130 000 €</strong>. → Obtenir un calendrier de réponse et intégrer les montants dès validation.</div></div></div>
+  </div>
+</main>
+
+<main class="page" id="page-guide">
+  <div class="guide-grid">
+    <div class="guide-section">
+      <div class="guide-header">01 · Cadence de mise à jour</div>
+      <div class="guide-item"><span class="guide-num">Hebdo</span><span class="guide-text"><strong>Chaque lundi matin :</strong> relire les lignes en dépassement ou &gt;80%. Identifier les dépenses à venir. 15 min max.</span></div>
+      <div class="guide-item"><span class="guide-num">Mensuel</span><span class="guide-text"><strong>Avant le 15 :</strong> mettre à jour colonnes Engagé / Mandaté. Vérifier les alertes. Envoyer synthèse à la direction.</span></div>
+      <div class="guide-item"><span class="guide-num">Trimestriel</span><span class="guide-text"><strong>Revue budgétaire :</strong> comparer réalisé vs prévisionnel. Initier virements internes ou demandes BS.</span></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-header">02 · Colonnes à saisir dans Sheets</div>
+      <div class="guide-item"><span class="guide-num">Col. F</span><span class="guide-text"><strong>Engagé :</strong> total des bons de commande émis, même non encore payés.</span></div>
+      <div class="guide-item"><span class="guide-num">Col. G</span><span class="guide-text"><strong>Mandaté :</strong> total effectivement payé. Seul chiffre comptablement définitif.</span></div>
+      <div class="guide-item"><span class="guide-num">Col. N</span><span class="guide-text"><strong>Commentaires :</strong> toujours ajouter date + initiales. Ex : «21/08 — GD : facture reçue».</span></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-header">03 · Règles de gestion</div>
+      <div class="guide-item"><span class="guide-num">Règle 1</span><span class="guide-text"><strong>Seuil d'alerte à 75% :</strong> dès qu'une ligne dépasse 75%, ouvrir un point avec le responsable pour identifier les engagements restants.</span></div>
+      <div class="guide-item"><span class="guide-num">Règle 2</span><span class="guide-text"><strong>Gel des engagements :</strong> toute ligne avec disponible &lt;10 000 € nécessite une validation avant tout nouveau bon de commande.</span></div>
+      <div class="guide-item"><span class="guide-num">Règle 3</span><span class="guide-text"><strong>Virements internes :</strong> calendrier fixe avant le 15 de chaque mois pour éviter les blocages en fin d'exercice.</span></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-header">04 · Actions prioritaires immédiates</div>
+      <div class="guide-item"><span class="guide-num" style="background:var(--danger-bg);color:var(--danger)">Urgent</span><span class="guide-text"><strong>DEDU0186 :</strong> demande de virement interne pour –71 000 €. Confirmer les 30K restants à engager.</span></div>
+      <div class="guide-item"><span class="guide-num" style="background:var(--danger-bg);color:var(--danger)">Urgent</span><span class="guide-text"><strong>DEDU0100 :</strong> relancer DSB pour le virement 340 000 €. Aucun engagement possible avant réception.</span></div>
+      <div class="guide-item"><span class="guide-num" style="background:var(--warn-bg);color:var(--warn)">Court terme</span><span class="guide-text"><strong>DEDU0084 &amp; DEDU0086 :</strong> chiffrer travaux restants et formaliser demande de budget supplémentaire.</span></div>
+      <div class="guide-item"><span class="guide-num" style="background:var(--blue-bg);color:var(--blue)">Suivi</span><span class="guide-text"><strong>DEDU0125 &amp; DEDU0195 :</strong> s'assurer que les demandes +60K€ et +70K€ au BS sont enregistrées.</span></div>
+    </div>
+  </div>
+</main>
+
+<footer>Pôle Technique — Suivi Budgétaire Prévisionnel · Maj 21/08/2025 · Source : Google Sheets Drive</footer>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+const labels = ['DEDU0084','DEDU0086','DEDU0123','DEDU0186','DEDU0191','DEDU0100','DEDU0124','DEDU0125','DEDU0195'];
+const pcts = [112.7, 115.0, 85.3, 123.1, 186.7, 99.9, 43.8, 55.7, 91.9];
+const colors = pcts.map(p => p > 100 ? '#c94040' : p >= 75 ? '#d4860a' : '#2d9a5a');
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ data: pcts.map(p => Math.min(p,200)), backgroundColor: colors, borderRadius: 4, barPercentage: 0.65 }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + pcts[ctx.dataIndex].toFixed(1) + '% consommé' } } }, scales: { x: { ticks: { font: { size: 10 }, autoSkip: false } }, y: { min: 0, max: 200, ticks: { callback: v => v + '%', font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.05)' } } } }
+});
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: { labels: ['Fonctionnement', 'Investissement'], datasets: [{ data: [579700, 1050263], backgroundColor: ['#3a6fa8', '#2d9a5a'], borderWidth: 2, borderColor: '#ffffff' }] },
+  options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ' : ' + Math.round(ctx.parsed/1000) + ' k€' } } } }
+});
+</script>
+</body>
+</html>
