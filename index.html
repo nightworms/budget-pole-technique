@@ -268,21 +268,21 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
   <div class="split-grid">
     <div class="split-card">
       <div class="split-title">Fonctionnement — Synthèse</div>
-      <div class="split-row"><span class="split-key">Budget après DM</span><span class="split-val blue">579 700 €</span></div>
-      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val">680 383 €</span></div>
-      <div class="split-row"><span class="split-key">Total mandaté</span><span class="split-val">680 383 €</span></div>
-      <div class="split-row"><span class="split-key">Reste à mandater</span><span class="split-val ok">0 €</span></div>
-      <div class="split-row"><span class="split-key">Disponible net</span><span class="split-val neg">–100 683 €</span></div>
-      <div class="split-row"><span class="split-key">RAR estimé</span><span class="split-val warn">72 000 €</span></div>
+      <div class="split-row"><span class="split-key">Budget après DM</span><span class="split-val blue" id="sf-vote">—</span></div>
+      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val" id="sf-engage">—</span></div>
+      <div class="split-row"><span class="split-key">Total mandaté</span><span class="split-val" id="sf-mandate">—</span></div>
+      <div class="split-row"><span class="split-key">Reste à mandater</span><span class="split-val" id="sf-ram">—</span></div>
+      <div class="split-row"><span class="split-key">Disponible net</span><span class="split-val" id="sf-dispo">—</span></div>
+      <div class="split-row"><span class="split-key">RAR estimé</span><span class="split-val warn" id="sf-rar">—</span></div>
     </div>
     <div class="split-card">
       <div class="split-title">Investissement — Synthèse</div>
-      <div class="split-row"><span class="split-key">Budget après DM</span><span class="split-val blue">1 390 263 €</span></div>
-      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val">853 092 €</span></div>
-      <div class="split-row"><span class="split-key">Total mandaté</span><span class="split-val">853 092 €</span></div>
-      <div class="split-row"><span class="split-key">Reste à mandater</span><span class="split-val ok">0 €</span></div>
-      <div class="split-row"><span class="split-key">Disponible net</span><span class="split-val ok">+537 171 €</span></div>
-      <div class="split-row"><span class="split-key">RAR estimé</span><span class="split-val warn">60 000 €</span></div>
+      <div class="split-row"><span class="split-key">Budget après DM</span><span class="split-val blue" id="si-vote">—</span></div>
+      <div class="split-row"><span class="split-key">Total engagé</span><span class="split-val" id="si-engage">—</span></div>
+      <div class="split-row"><span class="split-key">Total mandaté</span><span class="split-val" id="si-mandate">—</span></div>
+      <div class="split-row"><span class="split-key">Reste à mandater</span><span class="split-val" id="si-ram">—</span></div>
+      <div class="split-row"><span class="split-key">Disponible net</span><span class="split-val" id="si-dispo">—</span></div>
+      <div class="split-row"><span class="split-key">RAR estimé</span><span class="split-val warn" id="si-rar">—</span></div>
     </div>
   </div>
 
@@ -293,16 +293,19 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
         <div class="legend-item"><div class="legend-sq" style="background:var(--ok-mid)"></div>Sain (&lt;75%)</div>
         <div class="legend-item"><div class="legend-sq" style="background:var(--warn-mid)"></div>Attention (75–99%)</div>
         <div class="legend-item"><div class="legend-sq" style="background:var(--danger-mid)"></div>Dépassé (&gt;100%)</div>
-        <div class="legend-item"><div class="legend-sq" style="background:var(--blue-mid);opacity:.4"></div>% théorique (63,4%)</div>
+        <div class="legend-item"><div class="legend-sq" style="background:var(--blue-mid);opacity:.4"></div>Théorique : <span id="legendTheo">—%</span></div>
       </div>
       <div style="position:relative;height:260px"><canvas id="barChart"></canvas></div>
     </div>
-    <div class="chart-card">
-      <h3>Budget voté — Fonct. vs Invest.</h3>
-      <div style="position:relative;height:190px;margin-bottom:10px"><canvas id="donutChart"></canvas></div>
-      <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
-        <div class="legend-item"><div class="legend-sq" style="background:#3a6fa8"></div>Fonctionnement : 580 k€ (29%)</div>
-        <div class="legend-item"><div class="legend-sq" style="background:#2d9a5a"></div>Investissement : 1 390 k€ (71%)</div>
+    <div class="chart-card" style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <h3>Budget voté — Fonct. vs Invest.</h3>
+        <div style="position:relative;height:160px;margin-bottom:8px"><canvas id="donutChart"></canvas></div>
+        <div style="display:flex;flex-direction:column;gap:4px" id="donutLegend"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:10px">RAR estimé par ligne</h3>
+        <div id="rarBars" style="display:flex;flex-direction:column;gap:5px"></div>
       </div>
     </div>
   </div>
@@ -584,8 +587,16 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
       <span class="mm-zoom-label" id="mm-zoom-label">100%</span>
-      <div style="width:1px;height:20px;background:var(--border-med);margin:0 4px"></div>
-      <span style="font-size:11px;color:var(--text-faint)">Glisser pour déplacer · Molette pour zoomer</span>
+      <div style="width:1px;height:20px;background:var(--border-med);margin:0 2px"></div>
+      <button class="mm-ctrl-btn" onclick="mmExportPNG()" title="Exporter en PNG" style="width:auto;padding:0 10px;gap:5px;font-size:11px;font-family:var(--font-b)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export PNG
+      </button>
+      <button class="mm-ctrl-btn" onclick="mmToggleFullscreen()" title="Plein écran" id="mmFsBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+      <div style="width:1px;height:20px;background:var(--border-med);margin:0 2px"></div>
+      <span style="font-size:11px;color:var(--text-faint)">Glisser · Molette</span>
     </div>
   </div>
   <div class="mm-viewport" id="mmViewport">
@@ -735,19 +746,105 @@ function refreshTables() {
   document.getElementById('tbody-inv').innerHTML = buildRows('I');
 }
 function refreshKPIs() {
-  const totalVote = DATA.reduce((s,d) => s+d.bInit+d.dm, 0);
-  const fonctVote = DATA.filter(d=>d.type==='F').reduce((s,d) => s+d.bInit+d.dm, 0);
-  const invVote   = DATA.filter(d=>d.type==='I').reduce((s,d) => s+d.bInit+d.dm, 0);
+  const fonctD  = DATA.filter(d=>d.type==='F');
+  const invD    = DATA.filter(d=>d.type==='I');
+
+  const fonctVote    = fonctD.reduce((s,d) => s+d.bInit+d.dm, 0);
+  const fonctEngage  = fonctD.reduce((s,d) => s+d.engage, 0);
+  const fonctMandate = fonctD.reduce((s,d) => s+d.mandate, 0);
+  const fonctRAR     = fonctD.reduce((s,d) => s+d.rar, 0);
+  const fonctRAM     = fonctEngage - fonctMandate;
+  const fonctDispo   = fonctVote - fonctEngage;
+
+  const invVote      = invD.reduce((s,d) => s+d.bInit+d.dm, 0);
+  const invEngage    = invD.reduce((s,d) => s+d.engage, 0);
+  const invMandate   = invD.reduce((s,d) => s+d.mandate, 0);
+  const invRAR       = invD.reduce((s,d) => s+d.rar, 0);
+  const invRAM       = invEngage - invMandate;
+  const invDispo     = invVote - invEngage;
+
   const totalMandate = DATA.reduce((s,d) => s+d.mandate, 0);
-  const totalRAM = DATA.reduce((s,d) => s+(d.engage-d.mandate), 0);
-  const totalRAR = DATA.reduce((s,d) => s+d.rar, 0);
-  const depasse  = DATA.filter(d => (d.bInit+d.dm-d.engage) < 0).length;
+  const totalRAM     = DATA.reduce((s,d) => s+(d.engage-d.mandate), 0);
+  const totalRAR     = DATA.reduce((s,d) => s+d.rar, 0);
+  const depasse      = DATA.filter(d => (d.bInit+d.dm-d.engage) < 0).length;
+
+  // ── KPI cards ──────────────────────────────────────────
   document.getElementById('k-fonct').textContent    = fmtEur(fonctVote);
   document.getElementById('k-inv').textContent      = fmtEur(invVote);
   document.getElementById('k-mandate').textContent  = fmtEur(totalMandate);
   document.getElementById('k-ram').textContent      = fmtEur(totalRAM);
   document.getElementById('k-depasse').textContent  = depasse + ' ligne' + (depasse>1?'s':'');
   document.getElementById('k-rar').textContent      = fmtEur(totalRAR);
+
+  // ── split-cards ────────────────────────────────────────
+  const setEl = (id, val, cls) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    el.className = 'split-val' + (cls ? ' ' + cls : '');
+  };
+  setEl('sf-vote',    fmtEurFull(fonctVote),    'blue');
+  setEl('sf-engage',  fmtEurFull(fonctEngage),  '');
+  setEl('sf-mandate', fmtEurFull(fonctMandate), '');
+  setEl('sf-ram',     fonctRAM > 0 ? fmtEurFull(fonctRAM) : '0 €', fonctRAM > 0 ? 'warn' : 'ok');
+  setEl('sf-dispo',   (fonctDispo < 0 ? '–' : '+') + fmtEurFull(Math.abs(fonctDispo)), fonctDispo < 0 ? 'neg' : 'ok');
+  setEl('sf-rar',     fmtEurFull(fonctRAR), 'warn');
+
+  setEl('si-vote',    fmtEurFull(invVote),    'blue');
+  setEl('si-engage',  fmtEurFull(invEngage),  '');
+  setEl('si-mandate', fmtEurFull(invMandate), '');
+  setEl('si-ram',     invRAM > 0 ? fmtEurFull(invRAM) : '0 €', invRAM > 0 ? 'warn' : 'ok');
+  setEl('si-dispo',   (invDispo < 0 ? '–' : '+') + fmtEurFull(Math.abs(invDispo)), invDispo < 0 ? 'neg' : 'ok');
+  setEl('si-rar',     fmtEurFull(invRAR), 'warn');
+
+  // ── donut legend ───────────────────────────────────────
+  const total = fonctVote + invVote;
+  const donutEl = document.getElementById('donutLegend');
+  if (donutEl) {
+    const pctF = total > 0 ? (fonctVote/total*100).toFixed(0) : 0;
+    const pctI = total > 0 ? (invVote/total*100).toFixed(0) : 0;
+    donutEl.innerHTML = `
+      <div class="legend-item"><div class="legend-sq" style="background:#3a6fa8"></div>Fonctionnement : ${fmtEur(fonctVote)} (${pctF}%)</div>
+      <div class="legend-item"><div class="legend-sq" style="background:#2d9a5a"></div>Investissement : ${fmtEur(invVote)} (${pctI}%)</div>`;
+  }
+
+  // update donut chart data
+  if (window.donutChartInst) {
+    window.donutChartInst.data.datasets[0].data = [fonctVote, invVote];
+    window.donutChartInst.update();
+  }
+
+  // ── RAR bars ───────────────────────────────────────────
+  const rarEl = document.getElementById('rarBars');
+  if (rarEl) {
+    const withRAR = DATA.filter(d => d.rar > 0).sort((a,b) => b.rar - a.rar);
+    const maxRAR = withRAR.length > 0 ? withRAR[0].rar : 1;
+    if (withRAR.length === 0) {
+      rarEl.innerHTML = '<div style="font-size:11px;color:var(--text-faint);text-align:center;padding:8px 0">Aucun RAR estimé</div>';
+    } else {
+      rarEl.innerHTML = withRAR.map(d => {
+        const pct = (d.rar / maxRAR * 100).toFixed(0);
+        const st  = statusOf(d);
+        const barColor = st.cls === 'danger' ? 'var(--danger-mid)' : st.cls === 'warn' ? 'var(--warn-mid)' : 'var(--blue-mid)';
+        return `<div style="display:flex;align-items:center;gap:7px;font-size:10px">
+          <span style="font-family:var(--font-m);color:var(--text-muted);min-width:74px;font-size:9px">${d.code}</span>
+          <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${barColor};border-radius:3px;transition:width .4s"></div>
+          </div>
+          <span style="font-family:var(--font-m);color:var(--warn-mid);min-width:42px;text-align:right;font-size:9px;font-weight:600">${fmtEur(d.rar)}</span>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ── légende % théorique barre ──────────────────────────
+  const legendTheo = document.getElementById('legendTheo');
+  if (legendTheo) legendTheo.textContent = (PCT_THEORIQUE*100).toFixed(1) + '%';
+
+  // ── badge alertes ──────────────────────────────────────
+  const alertBadge = document.getElementById('alertCount');
+  if (alertBadge) alertBadge.textContent = depasse + 2; // dépassements + DM en attente
+
   updateCadrageReel();
 }
 
@@ -848,11 +945,29 @@ const barChartInst = new Chart(document.getElementById('barChart'), {
     responsive: true, maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: { callbacks: {
-        label: ctx => ctx.datasetIndex === 0
-          ? ' ' + pcts[ctx.dataIndex].toFixed(1) + '% consommé'
-          : ' ' + (PCT_THEORIQUE*100).toFixed(1) + '% théorique'
-      }}
+      tooltip: {
+        callbacks: {
+          title: ctx => {
+            const d = DATA[ctx[0].dataIndex];
+            return d ? d.code + ' — ' + d.label : ctx[0].label;
+          },
+          label: ctx => {
+            if (ctx.datasetIndex === 1) return ' Théorique : ' + (PCT_THEORIQUE*100).toFixed(1) + '%';
+            const d = DATA[ctx.dataIndex];
+            if (!d) return '';
+            const bdm = d.bInit + d.dm;
+            const dispo = bdm - d.engage;
+            const pct = bdm > 0 ? d.engage / bdm * 100 : 0;
+            return [
+              ' Consommé : ' + pct.toFixed(1) + '%',
+              ' Voté : ' + fmtEurFull(bdm),
+              ' Engagé : ' + fmtEurFull(d.engage),
+              ' Dispo : ' + (dispo < 0 ? '–' : '') + fmtEurFull(Math.abs(dispo)),
+              d.rar > 0 ? ' RAR : ' + fmtEurFull(d.rar) : null
+            ].filter(Boolean);
+          }
+        }
+      }
     },
     scales: {
       x: { ticks: { font: { size: 9 }, autoSkip: false } },
@@ -868,12 +983,15 @@ function updateBarChart() {
   barChartInst.update();
 }
 
-new Chart(document.getElementById('donutChart'), {
+window.donutChartInst = new Chart(document.getElementById('donutChart'), {
   type: 'doughnut',
   data: {
     labels: ['Fonctionnement','Investissement'],
     datasets: [{
-      data: [579700, 1390263],
+      data: [
+        DATA.filter(d=>d.type==='F').reduce((s,d)=>s+d.bInit+d.dm,0),
+        DATA.filter(d=>d.type==='I').reduce((s,d)=>s+d.bInit+d.dm,0)
+      ],
       backgroundColor: ['#3a6fa8','#2d9a5a'],
       borderWidth: 2, borderColor: '#ffffff'
     }]
@@ -882,7 +1000,7 @@ new Chart(document.getElementById('donutChart'), {
     responsive: true, maintainAspectRatio: false, cutout: '65%',
     plugins: {
       legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ' : ' + Math.round(ctx.parsed/1000) + ' k€' } }
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ' : ' + fmtEur(ctx.parsed) } }
     }
   }
 });
@@ -891,279 +1009,294 @@ new Chart(document.getElementById('donutChart'), {
 let mmScale = 1, mmPanX = 0, mmPanY = 0;
 let mmDragging = false, mmDragStart = {x:0,y:0}, mmPanStart = {x:0,y:0};
 let mmGroup = null;
+let mmInitialized = false;
 
+// ── helpers ───────────────────────────────────────────────
 function fmtK(n) {
   const abs = Math.abs(Math.round(n));
-  return (n < 0 ? '–' : '') + (abs >= 1000 ? (abs/1000).toFixed(0)+'k€' : abs+'€');
+  const s = abs >= 1000000 ? (abs/1000000).toFixed(1)+' M€'
+          : abs >= 1000    ? (abs/1000).toFixed(0)+' k€'
+          : abs + ' €';
+  return (n < 0 ? '–' : '') + s;
 }
-
 function mmStatusColor(d) {
-  const dispo = d.bInit + d.dm - d.engage;
-  const pct = (d.bInit + d.dm) > 0 ? d.engage / (d.bInit + d.dm) : 0;
-  if (dispo < 0) return {fill:'#fde6e6', stroke:'#c94040', text:'#7a1a1a', badge:'Dépassé', badgeFill:'#c94040'};
-  if (pct >= 0.9) return {fill:'#fde6e6', stroke:'#c94040', text:'#7a1a1a', badge:'Critique', badgeFill:'#c94040'};
-  if (pct >= 0.75) return {fill:'#fdf2d8', stroke:'#d4860a', text:'#7a4f00', badge:'Attention', badgeFill:'#d4860a'};
-  return {fill:'#e2f2e7', stroke:'#2d9a5a', text:'#1a5c2e', badge:'OK', badgeFill:'#2d9a5a'};
+  const bdm = d.bInit + d.dm;
+  const dispo = bdm - d.engage;
+  const pct = bdm > 0 ? d.engage / bdm : 0;
+  if (dispo < 0)   return {fill:'#fde6e6',stroke:'#c94040',text:'#7a1a1a',label:'Dépassé'};
+  if (pct >= 0.90) return {fill:'#fde6e6',stroke:'#c94040',text:'#7a1a1a',label:'Critique'};
+  if (pct >= 0.75) return {fill:'#fdf2d8',stroke:'#d4860a',text:'#7a4f00',label:'Attention'};
+  return {fill:'#e2f2e7',stroke:'#2d9a5a',text:'#1a5c2e',label:'OK'};
 }
-
 function svgEl(tag, attrs) {
   const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
   for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
   return el;
 }
-function svgText(txt, x, y, attrs={}) {
+function mkText(content, x, y, attrs) {
   const el = svgEl('text', {x, y, ...attrs});
-  el.textContent = txt;
+  el.textContent = content;
   return el;
 }
+function truncate(str, max) {
+  return str.length > max ? str.slice(0, max) + '…' : str;
+}
 
+// ── drawing primitives ────────────────────────────────────
+function drawConnector(g, x1, y1, x2, y2, color, dashed) {
+  const mx = (x1 + x2) / 2;
+  const path = svgEl('path', {
+    d: `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`,
+    fill:'none', stroke:color, 'stroke-width':'2',
+    'stroke-dasharray': dashed ? '6,4' : 'none',
+    opacity:'0.65'
+  });
+  // insert before first child so connectors stay behind nodes
+  g.insertBefore(path, g.firstChild);
+}
+
+function drawRootNode(g, cx, cy) {
+  const totalBudget = DATA.reduce((s,d) => s + d.bInit + d.dm, 0);
+  const totalEngage = DATA.reduce((s,d) => s + d.engage, 0);
+  const pct = totalBudget > 0 ? totalEngage / totalBudget : 0;
+  const W=160, H=80, R=16;
+  const ng = svgEl('g', {transform:`translate(${cx},${cy})`});
+  // glow
+  ng.appendChild(svgEl('rect',{x:-W/2-4,y:-H/2-4,width:W+8,height:H+8,rx:R+4,fill:'rgba(45,74,62,0.18)'}));
+  // main rect
+  ng.appendChild(svgEl('rect',{x:-W/2,y:-H/2,width:W,height:H,rx:R,fill:'#2d4a3e'}));
+  // top label
+  ng.appendChild(mkText('FINANCE PRÉVISIONNEL', 0, -H/2+15, {'text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'8.5','font-weight':'700',fill:'rgba(255,255,255,0.55)','letter-spacing':'0.08em'}));
+  ng.appendChild(mkText('PÔLE TECHNIQUE', 0, -H/2+32, {'text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'13','font-weight':'800',fill:'#fff'}));
+  // divider
+  ng.appendChild(svgEl('line',{x1:-W/2+16,y1:-H/2+40,x2:W/2-16,y2:-H/2+40,stroke:'rgba(255,255,255,0.15)','stroke-width':'1'}));
+  // budget total
+  ng.appendChild(mkText(fmtK(totalBudget) + ' voté', 0, -H/2+56, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'9.5',fill:'rgba(255,255,255,0.6)'}));
+  // progress track
+  const PW = W - 32;
+  ng.appendChild(svgEl('rect',{x:-PW/2,y:H/2-14,width:PW,height:5,rx:2,fill:'rgba(255,255,255,0.15)'}));
+  ng.appendChild(svgEl('rect',{x:-PW/2,y:H/2-14,width:Math.min(pct,1)*PW,height:5,rx:2,fill:'rgba(110,232,154,0.75)'}));
+  ng.appendChild(mkText((pct*100).toFixed(0)+'% engagé', 0, H/2-3, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'8',fill:'rgba(255,255,255,0.4)'}));
+  g.appendChild(ng);
+  return {cx, cy, W, H, R};
+}
+
+function drawBranchNode(g, cx, cy, label, budget, engaged, color) {
+  const W=138, H=58, R=12;
+  const pct = budget > 0 ? engaged / budget : 0;
+  const ng = svgEl('g', {transform:`translate(${cx},${cy})`});
+  ng.appendChild(svgEl('rect',{x:-W/2-3,y:-H/2+3,width:W,height:H,rx:R,fill:'rgba(0,0,0,0.10)'}));
+  ng.appendChild(svgEl('rect',{x:-W/2,y:-H/2,width:W,height:H,rx:R,fill:color}));
+  ng.appendChild(mkText(label, 0, -H/2+18, {'text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'11','font-weight':'800',fill:'#fff'}));
+  ng.appendChild(mkText('Budget : '+fmtK(budget), 0, -H/2+33, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'9',fill:'rgba(255,255,255,0.7)'}));
+  // mini progress
+  const PW = W - 28;
+  ng.appendChild(svgEl('rect',{x:-PW/2,y:H/2-12,width:PW,height:4,rx:2,fill:'rgba(255,255,255,0.2)'}));
+  ng.appendChild(svgEl('rect',{x:-PW/2,y:H/2-12,width:Math.min(pct,1)*PW,height:4,rx:2,fill:'rgba(255,255,255,0.7)'}));
+  ng.appendChild(mkText((pct*100).toFixed(0)+'%', 0, H/2-2, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'7.5',fill:'rgba(255,255,255,0.5)'}));
+  g.appendChild(ng);
+  return {cx, cy, W, H};
+}
+
+function drawSubGroupNode(g, cx, cy, label, color) {
+  const W=72, H=28, R=8;
+  const ng = svgEl('g', {transform:`translate(${cx},${cy})`});
+  ng.appendChild(svgEl('rect',{x:-W/2,y:-H/2,width:W,height:H,rx:R,fill:color}));
+  ng.appendChild(mkText(label, 0, H/2-8, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'10','font-weight':'700',fill:'#fff'}));
+  g.appendChild(ng);
+  return {cx, cy, W, H};
+}
+
+function drawLeafCard(g, lx, cy, d, tooltip) {
+  const st = mmStatusColor(d);
+  const bdm = d.bInit + d.dm;
+  const dispo = bdm - d.engage;
+  const pct = bdm > 0 ? d.engage / bdm : 0;
+  const W=224, H=90, R=11;
+  // x = left edge, y = center
+  const ng = svgEl('g', {transform:`translate(${lx},${cy - H/2})`,'data-code':d.code});
+
+  // shadow
+  ng.appendChild(svgEl('rect',{x:3,y:4,width:W,height:H,rx:R,fill:'rgba(0,0,0,0.07)'}));
+  // card bg
+  ng.appendChild(svgEl('rect',{x:0,y:0,width:W,height:H,rx:R,fill:st.fill,stroke:st.stroke,'stroke-width':'1.5'}));
+  // left accent bar (full height, rounded left only)
+  ng.appendChild(svgEl('rect',{x:0,y:0,width:5,height:H,rx:R,fill:st.stroke}));
+  ng.appendChild(svgEl('rect',{x:0,y:R,width:5,height:H-R,fill:st.stroke})); // square bottom-left
+
+  // ── code badge ───────────────────────────────────────
+  ng.appendChild(svgEl('rect',{x:12,y:10,width:75,height:15,rx:4,fill:st.stroke}));
+  ng.appendChild(mkText(d.code, 49, 21, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'8.5','font-weight':'700',fill:'#fff'}));
+
+  // ── status pill ──────────────────────────────────────
+  const pillW = 52;
+  ng.appendChild(svgEl('rect',{x:W-pillW-8,y:10,width:pillW,height:15,rx:7,fill:st.stroke,'fill-opacity':'0.18',stroke:st.stroke,'stroke-width':'1'}));
+  ng.appendChild(mkText(st.label, W-8-pillW/2, 21, {'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'8','font-weight':'700',fill:st.text}));
+
+  // ── label ────────────────────────────────────────────
+  ng.appendChild(mkText(truncate(d.label, 27), 12, 39, {'font-family':'DM Sans,sans-serif','font-size':'10','font-weight':'600',fill:st.text}));
+
+  // ── budget & disponible ──────────────────────────────
+  ng.appendChild(mkText('Voté : ' + fmtK(bdm), 12, 54, {'font-family':'DM Mono,monospace','font-size':'8.5',fill:'#6b6760'}));
+  ng.appendChild(mkText('Dispo : ' + fmtK(dispo), 12, 66, {'font-family':'DM Mono,monospace','font-size':'8.5',fill: dispo < 0 ? '#c94040' : '#2d9a5a', 'font-weight': dispo < 0 ? '600' : '400'}));
+
+  // ── RAR ──────────────────────────────────────────────
+  if (d.rar > 0) {
+    ng.appendChild(mkText('RAR ' + fmtK(d.rar), W-10, 54, {'text-anchor':'end','font-family':'DM Mono,monospace','font-size':'8',fill:'#d4860a','font-weight':'600'}));
+  }
+
+  // ── % consumed ───────────────────────────────────────
+  ng.appendChild(mkText((pct*100).toFixed(0)+'%', W-10, 38, {'text-anchor':'end','font-family':'Syne,sans-serif','font-size':'14','font-weight':'800',fill:st.stroke}));
+
+  // ── progress track ───────────────────────────────────
+  const PW = W - 20;
+  ng.appendChild(svgEl('rect',{x:10,y:H-16,width:PW,height:6,rx:3,fill:'rgba(0,0,0,0.08)'}));
+  // theoretical marker
+  ng.appendChild(svgEl('rect',{x:10+PCT_THEORIQUE*PW-1,y:H-17,width:2,height:8,rx:1,fill:'rgba(58,111,168,0.55)'}));
+  // real fill
+  const fw = Math.min(pct,1)*PW;
+  ng.appendChild(svgEl('rect',{x:10,y:H-16,width:fw,height:6,rx:3,fill:st.stroke}));
+  // overflow indicator
+  if (pct > 1) {
+    ng.appendChild(mkText('⚠', PW-4, H-11, {'text-anchor':'end','font-size':'8',fill:'#c94040'}));
+  }
+
+  // ── note/comment (small) ─────────────────────────────
+  if (d.comment) {
+    ng.appendChild(mkText(truncate(d.comment, 34), 10, H-4, {'font-family':'DM Sans,sans-serif','font-size':'7.5',fill:st.text,'fill-opacity':'0.6','font-style':'italic'}));
+  }
+
+  // hover interactivity (light highlight)
+  ng.style.cursor = 'default';
+  ng.addEventListener('mouseenter', () => {
+    ng.querySelector('rect:nth-child(2)').setAttribute('filter','url(#mm-shadow-lg)');
+  });
+  ng.addEventListener('mouseleave', () => {
+    ng.querySelector('rect:nth-child(2)').removeAttribute('filter');
+  });
+
+  g.appendChild(ng);
+  return {lx, cy, W, H, rightX: lx + W};
+}
+
+// ── full build ────────────────────────────────────────────
 function buildMindmap() {
   const svg = document.getElementById('mmSvg');
   svg.innerHTML = '';
+
+  // ── defs ──────────────────────────────────────────────
   const defs = svgEl('defs', {});
-  // Drop shadow filter
-  const filter = svgEl('filter', {id:'mm-shadow',x:'-10%',y:'-10%',width:'120%',height:'130%'});
-  const blur = svgEl('feDropShadow', {dx:'0',dy:'2',stdDeviation:'3','flood-color':'rgba(0,0,0,0.10)'});
-  filter.appendChild(blur);
-  defs.appendChild(filter);
+  const f1 = svgEl('filter',{id:'mm-shadow',x:'-15%',y:'-15%',width:'130%',height:'140%'});
+  f1.appendChild(svgEl('feDropShadow',{dx:'0',dy:'2',stdDeviation:'3.5','flood-color':'rgba(0,0,0,0.11)'}));
+  defs.appendChild(f1);
+  const f2 = svgEl('filter',{id:'mm-shadow-lg',x:'-20%',y:'-20%',width:'140%',height:'150%'});
+  f2.appendChild(svgEl('feDropShadow',{dx:'0',dy:'4',stdDeviation:'7','flood-color':'rgba(0,0,0,0.18)'}));
+  defs.appendChild(f2);
   svg.appendChild(defs);
 
   mmGroup = svgEl('g', {id:'mmGroup'});
   svg.appendChild(mmGroup);
 
-  const fonct = DATA.filter(d => d.type === 'F');
-  const inv   = DATA.filter(d => d.type === 'I');
-
-  // Layout constants
-  const CX = 120;       // root center X
-  const CY = 0;         // root center Y
-  const BRANCH_X = 340; // branch (Fonct/Invest) X
-  const LEAF_X = 640;   // leaf node X
-
-  const totalFonct = fonct.reduce((s,d) => s + d.bInit + d.dm, 0);
-  const totalInv   = inv.reduce((s,d) => s + d.bInit + d.dm, 0);
-
-  // Vertical spacing for leaves
-  const LEAF_H = 110;
-  const fonctHeight = fonct.length * LEAF_H;
-  const invHeight   = inv.length * LEAF_H;
-
-  const fonctY = -fonctHeight / 2 + LEAF_H / 2;
-  const invY   = fonctHeight / 2 + 80 + LEAF_H / 2;
-
-  // ── ROOT NODE ──────────────────────────────────────────
-  function drawRoot(x, y, total) {
-    const g = svgEl('g', {transform:`translate(${x},${y})`});
-    const rx = 68, ry = 42;
-    // shadow
-    const sh = svgEl('ellipse', {cx:'2',cy:'4',rx,ry,fill:'rgba(0,0,0,0.08)'});
-    g.appendChild(sh);
-    const bg = svgEl('rect', {x:-rx,y:-ry,width:rx*2,height:ry*2,rx:'14',fill:'#2d4a3e',filter:'url(#mm-shadow)'});
-    g.appendChild(bg);
-    const t1 = svgEl('text', {x:'0',y:'-10','text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'10','font-weight':'700',fill:'rgba(255,255,255,0.6)','letter-spacing':'0.08em'});
-    t1.textContent = 'FINANCE PRÉVISIONNEL';
-    g.appendChild(t1);
-    const t2 = svgEl('text', {x:'0',y:'6','text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'12','font-weight':'800',fill:'#ffffff'});
-    t2.textContent = 'PÔLE TECHNIQUE';
-    g.appendChild(t2);
-    const t3 = svgEl('text', {x:'0',y:'22','text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'9',fill:'rgba(255,255,255,0.45)'});
-    t3.textContent = fmtK(total) + ' total';
-    g.appendChild(t3);
-    mmGroup.appendChild(g);
-    return {x, y, rx, ry};
-  }
-
-  // ── BRANCH NODE ────────────────────────────────────────
-  function drawBranch(x, y, label, budget, color, iconChar) {
-    const g = svgEl('g', {transform:`translate(${x},${y})`});
-    const w=130, h=52, r=12;
-    const bg = svgEl('rect', {x:-w/2,y:-h/2,width:w,height:h,rx:r,fill:color,filter:'url(#mm-shadow)'});
-    g.appendChild(bg);
-    const t1 = svgEl('text', {x:'0',y:'-8','text-anchor':'middle','font-family':'Syne,sans-serif','font-size':'12','font-weight':'700',fill:'#fff'});
-    t1.textContent = iconChar + ' ' + label;
-    g.appendChild(t1);
-    const t2 = svgEl('text', {x:'0',y:'10','text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'10',fill:'rgba(255,255,255,0.7)'});
-    t2.textContent = 'Budget : ' + fmtK(budget);
-    g.appendChild(t2);
-    mmGroup.appendChild(g);
-    return {x, y, w, h};
-  }
-
-  // ── SUB-GROUP NODE ─────────────────────────────────────
-  function drawSubGroup(x, y, label, color) {
-    const g = svgEl('g', {transform:`translate(${x},${y})`});
-    const w=76, h=30, r=8;
-    const bg = svgEl('rect', {x:-w/2,y:-h/2,width:w,height:h,rx:r,fill:color});
-    g.appendChild(bg);
-    const t = svgEl('text', {x:'0',y:'5','text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'10','font-weight':'700',fill:'#fff'});
-    t.textContent = label;
-    g.appendChild(t);
-    mmGroup.appendChild(g);
-    return {x, y, w, h};
-  }
-
-  // ── LEAF NODE ──────────────────────────────────────────
-  function drawLeaf(x, y, d) {
-    const st = mmStatusColor(d);
-    const bdm = d.bInit + d.dm;
-    const dispo = bdm - d.engage;
-    const pct = bdm > 0 ? d.engage / bdm : 0;
-    const pctStr = (pct * 100).toFixed(0) + '%';
-
-    const g = svgEl('g', {transform:`translate(${x},${y})`});
-    const w = 210, h = 88, r = 12;
-
-    // Card background
-    const bg = svgEl('rect', {x:0,y:-h/2,width:w,height:h,rx:r,fill:st.fill,stroke:st.stroke,'stroke-width':'1.5',filter:'url(#mm-shadow)'});
-    g.appendChild(bg);
-
-    // Left accent bar
-    const bar = svgEl('rect', {x:0,y:-h/2,width:5,height:h,rx:r,fill:st.stroke});
-    g.appendChild(bar);
-    const bar2 = svgEl('rect', {x:0,y:-h/2+r,width:5,height:h-r,fill:st.stroke});
-    g.appendChild(bar2);
-
-    // Code badge
-    const codeBg = svgEl('rect', {x:12,y:-h/2+10,width:72,height:16,rx:4,fill:st.stroke});
-    g.appendChild(codeBg);
-    const codeT = svgEl('text', {x:'48',y:-h/2+21,'text-anchor':'middle','font-family':'DM Mono,monospace','font-size':'9','font-weight':'700',fill:'#fff'});
-    codeT.textContent = d.code;
-    g.appendChild(codeT);
-
-    // Label
-    const labelEl = svgEl('text', {x:'12',y:-h/2+40,'font-family':'DM Sans,sans-serif','font-size':'10','font-weight':'600',fill:st.text});
-    // Truncate label
-    const maxChars = 26;
-    labelEl.textContent = d.label.length > maxChars ? d.label.slice(0, maxChars) + '…' : d.label;
-    g.appendChild(labelEl);
-
-    // Budget voté & disponible
-    const b1 = svgEl('text', {x:'12',y:-h/2+56,'font-family':'DM Mono,monospace','font-size':'9',fill:'#6b6760'});
-    b1.textContent = 'Voté: ' + fmtK(bdm);
-    g.appendChild(b1);
-    const b2 = svgEl('text', {x:'12',y:-h/2+68,'font-family':'DM Mono,monospace','font-size':'9',fill: dispo < 0 ? '#c94040' : '#2d9a5a'});
-    b2.textContent = 'Dispo: ' + fmtK(dispo);
-    g.appendChild(b2);
-
-    // Pct text
-    const pctEl = svgEl('text', {x:'200',y:-h/2+20,'text-anchor':'end','font-family':'Syne,sans-serif','font-size':'15','font-weight':'700',fill:st.stroke});
-    pctEl.textContent = pctStr;
-    g.appendChild(pctEl);
-
-    // Progress bar bg
-    const pbg = svgEl('rect', {x:'12',y:h/2-18,width:w-24,height:7,rx:3,fill:'rgba(0,0,0,0.08)'});
-    g.appendChild(pbg);
-    // Progress fill
-    const pw = Math.min(pct, 1) * (w - 24);
-    const pfill = svgEl('rect', {x:'12',y:h/2-18,width:pw.toFixed(1),height:7,rx:3,fill:st.stroke});
-    g.appendChild(pfill);
-
-    // RAR note if present
-    if (d.rar > 0) {
-      const rarEl = svgEl('text', {x:'200',y:h/2-8,'text-anchor':'end','font-family':'DM Mono,monospace','font-size':'8',fill:'#d4860a'});
-      rarEl.textContent = 'RAR: ' + fmtK(d.rar);
-      g.appendChild(rarEl);
-    }
-
-    mmGroup.appendChild(g);
-    return {x, y, w, h};
-  }
-
-  // ── CURVED CONNECTOR ──────────────────────────────────
-  function drawConnector(x1, y1, x2, y2, color='#ccc', dashed=false) {
-    const cx = (x1 + x2) / 2;
-    const path = svgEl('path', {
-      d: `M ${x1} ${y1} C ${cx} ${y1}, ${cx} ${y2}, ${x2} ${y2}`,
-      fill:'none', stroke:color, 'stroke-width':'2',
-      'stroke-dasharray': dashed ? '5,4' : 'none',
-      opacity:'0.7'
-    });
-    mmGroup.insertBefore(path, mmGroup.firstChild);
-  }
-
-  // ── LAYOUT ────────────────────────────────────────────
-  const totalAll = totalFonct + totalInv;
-  const root = drawRoot(CX, CY, totalAll);
-
-  // Branch Y centers
-  const fonctBranchY = -fonctHeight / 2 - 20;
-  const invBranchY   =  invHeight / 2 + 20;
-
-  // FONCTIONNEMENT branch
-  const fonctSvc = ['DEDU', 'DRMU'];
+  // ── data slices ───────────────────────────────────────
+  const fonct     = DATA.filter(d => d.type === 'F');
+  const inv       = DATA.filter(d => d.type === 'I');
   const fonctDedu = fonct.filter(d => d.svc === 'DEDU');
   const fonctDrmu = fonct.filter(d => d.svc === 'DRMU');
-  const SUBG_X = 480;
-  const LEAF_START_X = 700;
 
-  // Compute Y for DEDU subgroup (center of its leaves)
-  const deduLeaves = fonctDedu;
-  const drmuLeaves = fonctDrmu;
-  const DEDU_F_Y = fonctBranchY - (drmuLeaves.length) * LEAF_H / 2 - 20;
-  const DRMU_F_Y = fonctBranchY + (deduLeaves.length) * LEAF_H / 2 + 20;
+  const totalFonct   = fonct.reduce((s,d) => s + d.bInit + d.dm, 0);
+  const engageFonct  = fonct.reduce((s,d) => s + d.engage, 0);
+  const totalInv     = inv.reduce((s,d) => s + d.bInit + d.dm, 0);
+  const engageInv    = inv.reduce((s,d) => s + d.engage, 0);
 
-  // draw branch
-  drawBranch(BRANCH_X, fonctBranchY, 'FONCTIONNEMENT', totalFonct, '#3a6fa8', '🏗');
-  drawConnector(CX + root.rx, CY, BRANCH_X - 65, fonctBranchY, '#3a6fa8');
+  // ── layout constants ──────────────────────────────────
+  const LEAF_H   = 104;   // vertical pitch between leaf centres
+  const LEAF_W   = 224;   // card width
+  const ROOT_CX  = 0;
+  const BRANCH_X = 220;   // centre X of branch nodes
+  const SUBG_X   = 390;   // centre X of sub-group nodes
+  const LEAF_LX  = 460;   // left edge X of leaf cards
+
+  // ── compute vertical centres ──────────────────────────
+  // FONCTIONNEMENT leaves: DEDU then DRMU, no overlap
+  const deduCount = fonctDedu.length;
+  const drmuCount = fonctDrmu.length;
+  const fonctCount = deduCount + drmuCount;
+  const invCount   = inv.length;
+
+  // We'll lay fonct leaves at top, inv leaves below, separated by a gap
+  const GAP = 60;
+  const FONCT_TOP = -(fonctCount * LEAF_H) / 2;
+  const INV_TOP   = FONCT_TOP + fonctCount * LEAF_H + GAP;
+
+  function leafCY(groupTop, i) { return groupTop + i * LEAF_H + LEAF_H / 2; }
+
+  // centres for sub-groups
+  const deduGroupTop  = FONCT_TOP;
+  const drmuGroupTop  = FONCT_TOP + deduCount * LEAF_H;
+  const deduSubCY     = deduGroupTop  + (deduCount  * LEAF_H) / 2;
+  const drmuSubCY     = drmuGroupTop  + (drmuCount  * LEAF_H) / 2;
+  const fonctBranchCY = FONCT_TOP + (fonctCount * LEAF_H) / 2;
+  const invBranchCY   = INV_TOP   + (invCount   * LEAF_H) / 2;
+  const rootCY        = (fonctBranchCY + invBranchCY) / 2;
+
+  // ── ROOT ──────────────────────────────────────────────
+  const root = drawRootNode(mmGroup, ROOT_CX, rootCY);
+
+  // ── FONCTIONNEMENT BRANCH ─────────────────────────────
+  const bf = drawBranchNode(mmGroup, BRANCH_X, fonctBranchCY, 'FONCTIONNEMENT', totalFonct, engageFonct, '#3a6fa8');
+  drawConnector(mmGroup, ROOT_CX + root.W/2, rootCY, BRANCH_X - bf.W/2, fonctBranchCY, '#3a6fa8', false);
 
   // DEDU sub-group (fonct)
-  const deduFCY = fonctBranchY - (drmuLeaves.length * LEAF_H / 2) - 30;
-  drawSubGroup(SUBG_X, deduFCY, 'DEDU', '#5580a0');
-  drawConnector(BRANCH_X + 65, fonctBranchY, SUBG_X - 38, deduFCY, '#3a6fa8', true);
-  deduLeaves.forEach((d, i) => {
-    const ly = deduFCY - ((deduLeaves.length - 1) / 2 - i) * LEAF_H;
-    drawLeaf(LEAF_START_X, ly, d);
-    drawConnector(SUBG_X + 38, deduFCY, LEAF_START_X, ly, '#5580a0', true);
-  });
+  if (deduCount > 0) {
+    const sg = drawSubGroupNode(mmGroup, SUBG_X, deduSubCY, 'DEDU', '#4a70a0');
+    drawConnector(mmGroup, BRANCH_X + bf.W/2, fonctBranchCY, SUBG_X - sg.W/2, deduSubCY, '#4a70a0', true);
+    fonctDedu.forEach((d, i) => {
+      const cy = leafCY(deduGroupTop, i);
+      drawLeafCard(mmGroup, LEAF_LX, cy, d);
+      drawConnector(mmGroup, SUBG_X + sg.W/2, deduSubCY, LEAF_LX, cy, '#4a70a0', true);
+    });
+  }
 
   // DRMU sub-group (fonct)
-  const drmuFCY = fonctBranchY + (deduLeaves.length * LEAF_H / 2) + 30;
-  drawSubGroup(SUBG_X, drmuFCY, 'DRMU', '#6a4fa0');
-  drawConnector(BRANCH_X + 65, fonctBranchY, SUBG_X - 38, drmuFCY, '#3a6fa8', true);
-  drmuLeaves.forEach((d, i) => {
-    const ly = drmuFCY - ((drmuLeaves.length - 1) / 2 - i) * LEAF_H;
-    drawLeaf(LEAF_START_X, ly, d);
-    drawConnector(SUBG_X + 38, drmuFCY, LEAF_START_X, ly, '#6a4fa0', true);
-  });
-
-  // INVESTISSEMENT branch
-  const invBY = invBranchY + fonctBranchY;
-  const allInvY = invLeafCenterY();
-  function invLeafCenterY() {
-    // place invest below fonct with gap
-    const fonctSpan = fonctDedu.length * LEAF_H + drmuLeaves.length * LEAF_H + 80;
-    return fonctBranchY + fonctSpan / 2 + 80;
+  if (drmuCount > 0) {
+    const sg = drawSubGroupNode(mmGroup, SUBG_X, drmuSubCY, 'DRMU', '#7a55c0');
+    drawConnector(mmGroup, BRANCH_X + bf.W/2, fonctBranchCY, SUBG_X - sg.W/2, drmuSubCY, '#7a55c0', true);
+    fonctDrmu.forEach((d, i) => {
+      const cy = leafCY(drmuGroupTop, i);
+      drawLeafCard(mmGroup, LEAF_LX, cy, d);
+      drawConnector(mmGroup, SUBG_X + sg.W/2, drmuSubCY, LEAF_LX, cy, '#7a55c0', true);
+    });
   }
-  const invCenter = invLeafCenterY();
 
-  drawBranch(BRANCH_X, invCenter, 'INVESTISSEMENT', totalInv, '#2d9a5a', '🔧');
-  drawConnector(CX + root.rx, CY, BRANCH_X - 65, invCenter, '#2d9a5a');
+  // ── INVESTISSEMENT BRANCH ─────────────────────────────
+  const bi = drawBranchNode(mmGroup, BRANCH_X, invBranchCY, 'INVESTISSEMENT', totalInv, engageInv, '#2d9a5a');
+  drawConnector(mmGroup, ROOT_CX + root.W/2, rootCY, BRANCH_X - bi.W/2, invBranchCY, '#2d9a5a', false);
 
-  // INV all DEDU subgroup
-  drawSubGroup(SUBG_X, invCenter, 'DEDU', '#2d7a4a');
-  drawConnector(BRANCH_X + 65, invCenter, SUBG_X - 38, invCenter, '#2d9a5a', true);
+  // All inv are DEDU
+  const sgI = drawSubGroupNode(mmGroup, SUBG_X, invBranchCY, 'DEDU', '#2d7a4a');
+  drawConnector(mmGroup, BRANCH_X + bi.W/2, invBranchCY, SUBG_X - sgI.W/2, invBranchCY, '#2d9a5a', true);
   inv.forEach((d, i) => {
-    const ly = invCenter - ((inv.length - 1) / 2 - i) * LEAF_H;
-    drawLeaf(LEAF_START_X, ly, d);
-    drawConnector(SUBG_X + 38, invCenter, LEAF_START_X, ly, '#2d7a4a', true);
+    const cy = leafCY(INV_TOP, i);
+    drawLeafCard(mmGroup, LEAF_LX, cy, d);
+    drawConnector(mmGroup, SUBG_X + sgI.W/2, invBranchCY, LEAF_LX, cy, '#2d7a4a', true);
   });
 
-  // Auto-fit
-  mmAutoFit();
+  // ── auto-fit to viewport ──────────────────────────────
+  mmAutoFit(ROOT_CX - root.W/2, FONCT_TOP, LEAF_LX + LEAF_W, INV_TOP + invCount * LEAF_H);
 }
 
-function mmAutoFit() {
+function mmAutoFit(minX, minY, maxX, maxY) {
   const vp = document.getElementById('mmViewport');
-  const vpW = vp.clientWidth || 900;
-  const vpH = vp.clientHeight || 600;
-  // Fixed content bounds (approximate)
-  const contentW = 700 + 210 + 40; // LEAF_START_X + leaf w + pad
-  const contentH = 1100;
-  const scaleX = vpW / contentW;
-  const scaleY = vpH / contentH;
-  mmScale = Math.min(scaleX, scaleY, 1) * 0.88;
-  mmPanX = vpW / 2 - (700 + 210 / 2) / 2 * mmScale;
-  mmPanY = vpH / 2;
+  const vpW = vp.clientWidth  || 1000;
+  const vpH = vp.clientHeight || 650;
+  const contentW = maxX - minX + 40;
+  const contentH = maxY - minY + 40;
+  mmScale = Math.min(vpW / contentW, vpH / contentH, 1.0) * 0.90;
+  // centre the content
+  const centreX = (minX + maxX) / 2;
+  const centreY = (minY + maxY) / 2;
+  mmPanX = vpW / 2 - centreX * mmScale;
+  mmPanY = vpH / 2 - centreY * mmScale;
   applyMmTransform();
 }
 
@@ -1175,19 +1308,16 @@ function applyMmTransform() {
 
 function mmZoom(delta) {
   const vp = document.getElementById('mmViewport');
-  const cx = vp.clientWidth / 2;
-  const cy = vp.clientHeight / 2;
+  const cx = vp.clientWidth / 2, cy = vp.clientHeight / 2;
   const prev = mmScale;
-  mmScale = Math.max(0.15, Math.min(3, mmScale + delta));
+  mmScale = Math.max(0.12, Math.min(3.5, mmScale + delta));
   const ratio = mmScale / prev;
   mmPanX = cx - (cx - mmPanX) * ratio;
   mmPanY = cy - (cy - mmPanY) * ratio;
   applyMmTransform();
 }
 
-function mmReset() {
-  mmAutoFit();
-}
+function mmReset() { buildMindmap(); }
 
 function initMmDrag() {
   const vp = document.getElementById('mmViewport');
@@ -1195,7 +1325,7 @@ function initMmDrag() {
     if (e.button !== 0) return;
     mmDragging = true;
     mmDragStart = {x: e.clientX, y: e.clientY};
-    mmPanStart = {x: mmPanX, y: mmPanY};
+    mmPanStart  = {x: mmPanX,    y: mmPanY};
     e.preventDefault();
   });
   window.addEventListener('mousemove', e => {
@@ -1207,28 +1337,26 @@ function initMmDrag() {
   window.addEventListener('mouseup', () => { mmDragging = false; });
   vp.addEventListener('wheel', e => {
     e.preventDefault();
-    const delta = e.deltaY < 0 ? 0.1 : -0.1;
     const rect = vp.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const delta = e.deltaY < 0 ? 0.12 : -0.12;
     const prev = mmScale;
-    mmScale = Math.max(0.15, Math.min(3, mmScale + delta));
+    mmScale = Math.max(0.12, Math.min(3.5, mmScale + delta));
     const ratio = mmScale / prev;
     mmPanX = mx - (mx - mmPanX) * ratio;
     mmPanY = my - (my - mmPanY) * ratio;
     applyMmTransform();
   }, {passive: false});
-  // Touch support
-  let lastTouchDist = null;
+  // Touch
+  let td = null;
   vp.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       mmDragging = true;
       mmDragStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
-      mmPanStart = {x: mmPanX, y: mmPanY};
+      mmPanStart  = {x: mmPanX, y: mmPanY};
     }
-    if (e.touches.length === 2) {
-      lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    }
+    if (e.touches.length === 2)
+      td = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
   }, {passive: true});
   vp.addEventListener('touchmove', e => {
     if (e.touches.length === 1 && mmDragging) {
@@ -1236,21 +1364,83 @@ function initMmDrag() {
       mmPanY = mmPanStart.y + (e.touches[0].clientY - mmDragStart.y);
       applyMmTransform();
     }
-    if (e.touches.length === 2 && lastTouchDist) {
-      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      const ratio = dist / lastTouchDist;
-      mmScale = Math.max(0.15, Math.min(3, mmScale * ratio));
-      lastTouchDist = dist;
-      applyMmTransform();
+    if (e.touches.length === 2 && td) {
+      const d2 = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      mmScale = Math.max(0.12, Math.min(3.5, mmScale * d2 / td));
+      td = d2; applyMmTransform();
     }
   }, {passive: true});
-  vp.addEventListener('touchend', () => { mmDragging = false; lastTouchDist = null; });
+  vp.addEventListener('touchend', () => { mmDragging = false; td = null; });
 }
 
 function refreshMindmap() {
+  if (!mmInitialized) return;
   buildMindmap();
   document.getElementById('mm-maj').textContent = 'Maj ' + new Date().toLocaleDateString('fr-FR');
 }
+
+function mmExportPNG() {
+  const svg = document.getElementById('mmSvg');
+  const vp  = document.getElementById('mmViewport');
+  // clone SVG, set a fixed size and white background for export
+  const clone = svg.cloneNode(true);
+  const vpW = vp.clientWidth, vpH = vp.clientHeight;
+  clone.setAttribute('width', vpW);
+  clone.setAttribute('height', vpH);
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  // add white background rect
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('width', vpW); bg.setAttribute('height', vpH); bg.setAttribute('fill', '#f4f2ed');
+  clone.insertBefore(bg, clone.firstChild);
+  // embed fonts as data URL isn't possible easily; use a fallback notice
+  const xml = new XMLSerializer().serializeToString(clone);
+  const blob = new Blob([xml], {type:'image/svg+xml'});
+  const url  = URL.createObjectURL(blob);
+  // convert to PNG via canvas
+  const img  = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = vpW * 2; canvas.height = vpH * 2;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(2, 2);
+    ctx.drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    const link = document.createElement('a');
+    link.download = 'mindmap-pole-technique-' + new Date().toISOString().slice(0,10) + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('Mind map exportée en PNG');
+  };
+  img.src = url;
+}
+
+let mmIsFullscreen = false;
+function mmToggleFullscreen() {
+  const page = document.getElementById('page-mindmap');
+  const btn  = document.getElementById('mmFsBtn');
+  mmIsFullscreen = !mmIsFullscreen;
+  if (mmIsFullscreen) {
+    page.style.position = 'fixed';
+    page.style.inset = '0';
+    page.style.zIndex = '500';
+    page.style.height = '100vh';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>';
+    btn.title = 'Quitter le plein écran';
+  } else {
+    page.style.position = '';
+    page.style.inset = '';
+    page.style.zIndex = '';
+    page.style.height = '';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    btn.title = 'Plein écran';
+  }
+  // refit after layout change
+  setTimeout(() => buildMindmap(), 80);
+}
+// ESC to exit fullscreen
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && mmIsFullscreen) mmToggleFullscreen();
+});
 
 // ─── INIT ─────────────────────────────────────────────────
 initCadrage();
