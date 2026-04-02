@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pôle Technique — Suivi Budgétaire v3.5</title>
+<title>Pôle Technique — Suivi Budgétaire v3.6</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -204,7 +204,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
 
 <header class="site-header">
   <div class="header-brand">
-    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v3.5</span></h1>
+    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v3.6</span></h1>
     <p>DIRECTION DES ÉQUIPEMENTS &amp; DES UNITÉS · DEDU / DRMU · Exercice 2025</p>
   </div>
   <div class="header-right">
@@ -624,11 +624,11 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
   </div>
 </main>
 
-<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v3.5 · Exercice 2025 · Source : Google Sheets</footer>
+<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v3.6 · Exercice 2025 · Source : Google Sheets</footer>
 
 <script>
 // ─── CONFIG ────────────────────────────────────────────────
-const SHEET_ID = '11PaXqxoPpkVRo145XlaLmlGalVJVEKDZC7OLPeXfmX0';
+const SHEET_ID = '1msn8oG-VcC9YH_sWxmeFgrQ_o34LzZcGUPTKn1yJ9EU';
 const SHEET_NAME = 'Suivi%20budg%C3%A9taire';
 const PCT_THEORIQUE = computePctTheorique();
 
@@ -643,7 +643,7 @@ let DATA = [
   {code:'DEDU0124',svc:'DEDU',label:'Rideaux — confort thermique',type:'I',bInit:37263,dm:0,engage:16318,mandate:16318,rar:0,comment:'Attention consommation'},
   {code:'DEDU0125',svc:'DEDU',label:'Mobilier écoles / restauration',type:'I',bInit:300000,dm:0,engage:167000,mandate:167000,rar:60000,comment:'Demande BS +60K'},
   {code:'DEDU0195',svc:'DEDU',label:'Équipements de cuisine',type:'I',bInit:533000,dm:0,engage:490000,mandate:490000,rar:0,comment:'Demande BS +70K'},
-  {code:'DEDU0210',svc:'DEDU',label:'DEDU0210',type:'I',bInit:0,dm:0,engage:0,mandate:0,rar:0,comment:'Synchroniser pour charger les données'},
+  {code:'DEDU0210',svc:'DEDU',label:'Amélioration confort thermique',type:'I',bInit:120000,dm:0,engage:115308,mandate:53896,rar:0,comment:''},
 ];
 
 // ─── UTILITAIRES ───────────────────────────────────────────
@@ -944,18 +944,19 @@ async function syncFromSheets() {
 
     DATA = validRows.map(r => {
       // Déduire svc depuis la colonne C, ou depuis le code si vide
-      const svc  = clean(r[2]) || (r[0].startsWith('DRMU') ? 'DRMU' : 'DEDU');
-      // Déduire type depuis la colonne D (F=Fonctionnement, I=Investissement)
-      // Si vide, on garde la valeur existante dans DATA si elle existait
-      const typeRaw = clean(r[3]).toUpperCase();
-      const type = (typeRaw === 'F' || typeRaw === 'I') ? typeRaw
+      // Structure réelle du Sheet :
+      // A=0 Code, B=1 Service, C=2 Libellé, D=3 Type (Fonctionnement/Investissement)
+      // E=4 Budget initial, F=5 Mouvements DM, H=7 Engagé, I=8 Mandaté, P=15 RAR
+      const svc  = clean(r[1]) || (r[0].startsWith('DRMU') ? 'DRMU' : 'DEDU');
+      const typeRaw = clean(r[3]);
+      const type = typeRaw.toLowerCase().startsWith('invest') ? 'I'
+                 : typeRaw.toLowerCase().startsWith('fonct')  ? 'F'
                  : (DATA.find(d => d.code === r[0])?.type || 'F');
-      // Commentaire : colonne Q=16 si présente
-      const comment = clean(r[16] || r[17] || '');
+      const comment = clean(r[16] || '');
 
       return {
         code:    clean(r[0]),
-        label:   clean(r[1]) || (DATA.find(d => d.code === r[0])?.label || clean(r[0])),
+        label:   clean(r[2]) || (DATA.find(d => d.code === r[0])?.label || clean(r[0])),
         svc,
         type,
         bInit:   parseN(r[4]),
