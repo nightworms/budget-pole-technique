@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pôle Technique — Suivi Budgétaire v3.6</title>
+<title>Pôle Technique — Suivi Budgétaire v3.7</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -204,7 +204,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
 
 <header class="site-header">
   <div class="header-brand">
-    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v3.6</span></h1>
+    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v3.7</span></h1>
     <p>DIRECTION DES ÉQUIPEMENTS &amp; DES UNITÉS · DEDU / DRMU · Exercice 2025</p>
   </div>
   <div class="header-right">
@@ -624,7 +624,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
   </div>
 </main>
 
-<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v3.6 · Exercice 2025 · Source : Google Sheets</footer>
+<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v3.7 · Exercice 2025 · Source : Google Sheets</footer>
 
 <script>
 // ─── CONFIG ────────────────────────────────────────────────
@@ -632,18 +632,18 @@ const SHEET_ID = '1msn8oG-VcC9YH_sWxmeFgrQ_o34LzZcGUPTKn1yJ9EU';
 const SHEET_NAME = 'Suivi%20budg%C3%A9taire';
 const PCT_THEORIQUE = computePctTheorique();
 
-// Données initiales (remplacées intégralement à chaque sync)
+// Données initiales — valeurs réelles du Google Sheet (remplacées à chaque sync)
 let DATA = [
-  {code:'DEDU0084',svc:'DEDU',label:'Entretien réparation bâtiment',type:'F',bInit:100000,dm:0,engage:112683,mandate:112683,rar:21000,comment:'Reste 21K à vérifier'},
-  {code:'DEDU0086',svc:'DEDU',label:'Maintenance écoles',type:'F',bInit:45000,dm:-5000,engage:46000,mandate:46000,rar:16000,comment:'Transfert –5K vers DEDU0123'},
-  {code:'DEDU0123',svc:'DEDU',label:'Transport de bien — déménagement',type:'F',bInit:97000,dm:5000,engage:87000,mandate:87000,rar:5000,comment:'Transfert +5K reçu'},
-  {code:'DEDU0186',svc:'DRMU',label:'Maintenance équip. chaud/froid',type:'F',bInit:307700,dm:0,engage:378700,mandate:378700,rar:30000,comment:'DM urgente requise'},
-  {code:'DEDU0191',svc:'DRMU',label:'Conformité gaz',type:'F',bInit:30000,dm:0,engage:56000,mandate:56000,rar:0,comment:'Auditer imputations'},
-  {code:'DEDU0100',svc:'DEDU',label:'Installation matériels écoles',type:'I',bInit:180000,dm:340000,engage:179774,mandate:179774,rar:0,comment:'Attente virement DSB 340K€'},
-  {code:'DEDU0124',svc:'DEDU',label:'Rideaux — confort thermique',type:'I',bInit:37263,dm:0,engage:16318,mandate:16318,rar:0,comment:'Attention consommation'},
-  {code:'DEDU0125',svc:'DEDU',label:'Mobilier écoles / restauration',type:'I',bInit:300000,dm:0,engage:167000,mandate:167000,rar:60000,comment:'Demande BS +60K'},
-  {code:'DEDU0195',svc:'DEDU',label:'Équipements de cuisine',type:'I',bInit:533000,dm:0,engage:490000,mandate:490000,rar:0,comment:'Demande BS +70K'},
-  {code:'DEDU0210',svc:'DEDU',label:'Amélioration confort thermique',type:'I',bInit:120000,dm:0,engage:115308,mandate:53896,rar:0,comment:''},
+  {code:'DEDU0084',svc:'DEDU',label:'Entretien réparation bâtiment',       type:'F',bInit:37928, dm:0,engage:37512, mandate:26096,rar:21000,comment:'Seuil 90% atteint'},
+  {code:'DEDU0086',svc:'DEDU',label:'Maintenance écoles',                   type:'F',bInit:8019,  dm:0,engage:7419,  mandate:2604, rar:16000,comment:'Gel BC : dispo <10K€'},
+  {code:'DEDU0123',svc:'DEDU',label:'Transport de bien — déménagement',     type:'F',bInit:10414, dm:0,engage:9479,  mandate:5416, rar:5000, comment:'Gel BC : dispo <10K€'},
+  {code:'DEDU0186',svc:'DRMU',label:'Maintenance des équipements chaud/froid',type:'F',bInit:93204,dm:0,engage:93111,mandate:61615,rar:30000,comment:'Seuil 90% atteint'},
+  {code:'DEDU0191',svc:'DRMU',label:'Conformité gaz',                       type:'F',bInit:6303,  dm:0,engage:950,   mandate:950,  rar:0,    comment:'Gel BC : dispo <10K€'},
+  {code:'DEDU0100',svc:'DEDU',label:'Autre installation matériels écoles',  type:'I',bInit:54232, dm:0,engage:54231, mandate:41073,rar:0,    comment:'Seuil 90% atteint'},
+  {code:'DEDU0124',svc:'DEDU',label:'Acquisition rideaux — confort thermique',type:'I',bInit:20000,dm:0,engage:14300, mandate:0,    rar:0,    comment:'OK'},
+  {code:'DEDU0125',svc:'DEDU',label:'Acquisition mobilier Écoles/Restauration',type:'I',bInit:50000,dm:0,engage:49465,mandate:48825,rar:60000,comment:'Seuil 90% atteint'},
+  {code:'DEDU0195',svc:'DEDU',label:'Acquisition équipements de cuisine',   type:'I',bInit:75768, dm:0,engage:15249, mandate:11664,rar:0,    comment:'OK'},
+  {code:'DEDU0210',svc:'DEDU',label:'Amélioration confort thermique',       type:'I',bInit:120000,dm:0,engage:115308,mandate:53896,rar:0,    comment:'Seuil 90% atteint'},
 ];
 
 // ─── UTILITAIRES ───────────────────────────────────────────
@@ -902,85 +902,81 @@ async function syncFromSheets() {
   const btn = document.getElementById('syncBtn');
   btn.classList.add('loading');
   try {
-    // Plage élargie : A7:P50 pour supporter jusqu'à 44 lignes budgétaires
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}&range=A7:P50`;
+    // Données : lignes 5→18, colonnes A→R (structure réelle du Sheets)
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}&range=A5:R18`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const csv = await res.text();
 
-    const parseN = (v) => { const n = parseFloat((v||'').replace(/\s/g,'').replace(/€/g,'').replace(',','.')); return isNaN(n) ? 0 : n; };
-    const clean  = (v) => (v||'').replace(/^"|"$/g,'').trim();
-
-    const rows = csv.trim().split('\n').map(r => {
-      // CSV-aware split : handle quoted fields with commas inside
+    // Parser CSV robuste (gère les champs entre guillemets avec virgules/espaces/€)
+    function parseCSVRow(row) {
       const fields = [];
       let cur = '', inQ = false;
-      for (const ch of r) {
+      for (const ch of row) {
         if (ch === '"') { inQ = !inQ; }
-        else if (ch === ',' && !inQ) { fields.push(cur); cur = ''; }
+        else if (ch === ',' && !inQ) { fields.push(cur.trim()); cur = ''; }
         else cur += ch;
       }
-      fields.push(cur);
-      return fields.map(clean);
-    });
+      fields.push(cur.trim());
+      return fields;
+    }
 
-    // Filtrer les lignes vides ou sans code DEDU
+    // Parser un montant : "37 928 €", "-", "", "37928" → nombre
+    function parseEur(v) {
+      if (!v || v === '-' || v === '—') return 0;
+      const cleaned = v.replace(/[\s€%]/g,'').replace(',','.');
+      const n = parseFloat(cleaned);
+      return isNaN(n) ? 0 : n;
+    }
+
+    const rows = csv.trim().split('\n').map(parseCSVRow);
+
+    // Garder seulement les lignes avec un code DEDU valide (pas les totaux ni les en-têtes)
     const validRows = rows.filter(r => r[0] && /^DEDU\d+/.test(r[0]));
 
-    if (validRows.length === 0) throw new Error('Aucune ligne valide trouvée dans le Sheets');
+    if (validRows.length === 0) throw new Error('Aucune ligne DEDU trouvée — vérifiez le partage public du Sheets');
 
-    // Reconstruire DATA entièrement depuis le Sheets
-    // Colonnes attendues (0-indexed) :
-    //   A=0  code
-    //   B=1  libellé
-    //   C=2  service (DEDU/DRMU)
-    //   D=3  type (F/I)  — si absent on déduit depuis le code ou l'ordre
-    //   E=4  budget initial
-    //   F=5  mouvement DM
-    //   G=6  budget après DM (calculé, pas utilisé)
-    //   H=7  engagé
-    //   I=8  mandaté
-    //   P=15 RAR
-
+    // Reconstruire DATA depuis le Sheets (colonnes réelles observées) :
+    //  0=Code  1=Service  2=Libellé  3=Type
+    //  4=Budget initial  5=Mouv. DM  6=Budget après DM
+    //  7=Engagé  8=Mandaté  9=Reste à mandater  10=Disponible
+    //  11=%Consommé  12=%Théorique  13=Écart
+    //  14=Reste à engager  15=RAR  16=Statut  17=Alerte
+    const prevData = DATA; // conserver pour fallback libellé/type
     DATA = validRows.map(r => {
-      // Déduire svc depuis la colonne C, ou depuis le code si vide
-      // Structure réelle du Sheet :
-      // A=0 Code, B=1 Service, C=2 Libellé, D=3 Type (Fonctionnement/Investissement)
-      // E=4 Budget initial, F=5 Mouvements DM, H=7 Engagé, I=8 Mandaté, P=15 RAR
-      const svc  = clean(r[1]) || (r[0].startsWith('DRMU') ? 'DRMU' : 'DEDU');
-      const typeRaw = clean(r[3]);
-      const type = typeRaw.toLowerCase().startsWith('invest') ? 'I'
-                 : typeRaw.toLowerCase().startsWith('fonct')  ? 'F'
-                 : (DATA.find(d => d.code === r[0])?.type || 'F');
-      const comment = clean(r[16] || '');
-
+      const code     = r[0];
+      const svc      = r[1] || (code.startsWith('DRMU') ? 'DRMU' : 'DEDU');
+      const label    = r[2] || (prevData.find(d=>d.code===code)?.label || code);
+      const typeRaw  = (r[3]||'').toLowerCase();
+      const type     = typeRaw.startsWith('invest') ? 'I'
+                     : typeRaw.startsWith('fonct')  ? 'F'
+                     : (prevData.find(d=>d.code===code)?.type || 'F');
       return {
-        code:    clean(r[0]),
-        label:   clean(r[2]) || (DATA.find(d => d.code === r[0])?.label || clean(r[0])),
+        code,
+        label,
         svc,
         type,
-        bInit:   parseN(r[4]),
-        dm:      parseN(r[5]),
-        engage:  parseN(r[7]),
-        mandate: parseN(r[8]),
-        rar:     parseN(r[15]),
-        comment: comment || (DATA.find(d => d.code === r[0])?.comment || ''),
+        bInit:   parseEur(r[4]),
+        dm:      parseEur(r[5]),
+        engage:  parseEur(r[7]),
+        mandate: parseEur(r[8]),
+        rar:     parseEur(r[15]),
+        comment: r[17] || r[16] || (prevData.find(d=>d.code===code)?.comment || ''),
       };
     });
 
-    // Mise à jour du graphique barre (labels peuvent avoir changé)
+    // Rafraîchir tous les composants
     barChartInst.data.labels = DATA.map(d => d.code);
     updateBarChart();
-
     refreshKPIs();
     refreshTables();
     if (mmInitialized) refreshMindmap();
     updateLastSync();
     document.getElementById('majDate').textContent = new Date().toLocaleDateString('fr-FR');
-    showToast(`Données synchronisées — ${DATA.length} ligne(s) chargée(s)`);
+    showToast(`Synchronisé — ${DATA.length} lignes chargées`);
   } catch(e) {
     console.error('Sync error:', e);
-    showToast('Erreur de synchronisation : ' + e.message, true);
+    showToast('Erreur sync : ' + e.message, true);
   } finally {
     btn.classList.remove('loading');
   }
