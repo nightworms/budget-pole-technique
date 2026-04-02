@@ -869,7 +869,6 @@ function refreshKPIs() {
 }
 
 // ─── NAVIGATION ───────────────────────────────────────────
-let mmInitialized = false;
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1026,10 +1025,10 @@ window.donutChartInst = new Chart(document.getElementById('donutChart'), {
 });
 
 // ─── MINDMAP ──────────────────────────────────────────────
+let mmInitialized = false;
 let mmScale = 1, mmPanX = 0, mmPanY = 0;
 let mmDragging = false, mmDragStart = {x:0,y:0}, mmPanStart = {x:0,y:0};
 let mmGroup = null;
-let mmInitialized = false;
 
 // ── helpers ───────────────────────────────────────────────
 function fmtK(n) {
