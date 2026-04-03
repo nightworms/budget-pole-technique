@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pôle Technique — Suivi Budgétaire v3.7</title>
+<title>Pôle Technique — Suivi Budgétaire v4.0</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -204,7 +204,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
 
 <header class="site-header">
   <div class="header-brand">
-    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v3.7</span></h1>
+    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v4.0</span></h1>
     <p>DIRECTION DES ÉQUIPEMENTS &amp; DES UNITÉS · DEDU / DRMU · Exercice 2025</p>
   </div>
   <div class="header-right">
@@ -386,167 +386,39 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
 </main>
 
 <!-- ══════════════════════════════════════
-     PAGE 3 — DÉCISIONS MODIFICATIVES
+     PAGE 3 — DÉCISIONS MODIFICATIVES (depuis Sheets)
 ══════════════════════════════════════ -->
 <main class="page" id="page-dm">
-  <div class="section-title">Registre des décisions modificatives — Exercice 2025</div>
-  <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">
-    Ce registre trace l'ensemble des mouvements de crédits (virements internes, budgets supplémentaires, DM). 
-    Référence obligatoire pour la justification du Compte Administratif.
-  </p>
-  <div class="dm-table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Code ligne</th>
-          <th>Date DM</th>
-          <th>Référence délibération</th>
-          <th>Type de mouvement</th>
-          <th style="text-align:right">Montant (€)</th>
-          <th>Motif</th>
-          <th>Validé par</th>
-          <th>Statut</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="code">DEDU0086</span></td>
-          <td style="font-family:var(--font-m);font-size:11px">21/08/2025</td>
-          <td style="font-size:11px">DM n°1-2025</td>
-          <td><span class="sbadge warn">Virement sortant</span></td>
-          <td class="num neg">(5 000 €)</td>
-          <td style="font-size:11px;color:var(--text-muted)">Transfert transport vacances d'août vers DEDU0123</td>
-          <td style="font-size:11px">—</td>
-          <td><span class="sbadge ok"><span class="dot ok"></span>Validé</span></td>
-        </tr>
-        <tr style="background:#f8f6f2">
-          <td><span class="code">DEDU0123</span></td>
-          <td style="font-family:var(--font-m);font-size:11px">21/08/2025</td>
-          <td style="font-size:11px">DM n°1-2025</td>
-          <td><span class="sbadge ok">Virement entrant</span></td>
-          <td class="num ok">+5 000 €</td>
-          <td style="font-size:11px;color:var(--text-muted)">Réception depuis DEDU0086 (transport)</td>
-          <td style="font-size:11px">—</td>
-          <td><span class="sbadge ok"><span class="dot ok"></span>Validé</span></td>
-        </tr>
-        <tr>
-          <td><span class="code">DEDU0100</span></td>
-          <td style="font-family:var(--font-m);font-size:11px;color:var(--warn-mid)">En attente</td>
-          <td style="font-size:11px;color:var(--text-faint)">BS 2025</td>
-          <td><span class="sbadge warn">Virement entrant</span></td>
-          <td class="num blue">+340 000 €</td>
-          <td style="font-size:11px;color:var(--text-muted)">Virement DSB à recevoir — relance en cours</td>
-          <td style="font-size:11px">DSB</td>
-          <td><span class="sbadge warn"><span class="dot warn"></span>En attente</span></td>
-        </tr>
-        <tr style="background:#f8f6f2">
-          <td><span class="code">DEDU0125</span></td>
-          <td style="font-family:var(--font-m);font-size:11px;color:var(--warn-mid)">En attente</td>
-          <td style="font-size:11px;color:var(--text-faint)">BS 2025</td>
-          <td><span class="sbadge info">Budget supplémentaire</span></td>
-          <td class="num blue">+60 000 €</td>
-          <td style="font-size:11px;color:var(--text-muted)">Demande BS mobilier écoles/restauration</td>
-          <td style="font-size:11px">—</td>
-          <td><span class="sbadge warn"><span class="dot warn"></span>En attente</span></td>
-        </tr>
-        <tr>
-          <td><span class="code">DEDU0195</span></td>
-          <td style="font-family:var(--font-m);font-size:11px;color:var(--warn-mid)">En attente</td>
-          <td style="font-size:11px;color:var(--text-faint)">BS 2025</td>
-          <td><span class="sbadge info">Budget supplémentaire</span></td>
-          <td class="num blue">+70 000 €</td>
-          <td style="font-size:11px;color:var(--text-muted)">Demande BS équipements de cuisine</td>
-          <td style="font-size:11px">—</td>
-          <td><span class="sbadge warn"><span class="dot warn"></span>En attente</span></td>
-        </tr>
-        <tr style="background:var(--surface2);font-weight:600">
-          <td colspan="4" style="font-size:12px;font-weight:600">TOTAL MOUVEMENTS</td>
-          <td class="num blue" style="font-weight:600">+470 000 €</td>
-          <td colspan="3"></td>
-        </tr>
-      </tbody>
-    </table>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+    <div>
+      <div class="section-title" style="margin:0 0 4px">Registre des décisions modificatives — Exercice 2025</div>
+      <p style="font-size:12px;color:var(--text-muted)">
+        Source : onglet "Décisions modificatives" du Google Sheet · Mis à jour à chaque synchronisation.
+      </p>
+    </div>
+    <span style="font-family:var(--font-m);font-size:10px;color:var(--text-faint)" id="dm-last-sync">Non synchronisé</span>
   </div>
-
+  <div id="dm-container">
+    <div style="text-align:center;padding:40px;color:var(--text-faint);font-size:13px">
+      Cliquez sur <strong>Synchroniser</strong> pour charger les décisions modificatives.
+    </div>
+  </div>
   <div style="margin-top:16px;padding:12px 16px;background:var(--blue-bg);border-radius:var(--r-lg);font-size:12px;color:var(--blue);border:1px solid rgba(58,111,168,.2)">
-    <strong>Rappel réglementaire :</strong> Toute décision modificative doit faire l'objet d'une délibération du Conseil ou d'une décision déléguée à l'exécutif. 
+    <strong>Rappel réglementaire :</strong> Toute décision modificative doit faire l'objet d'une délibération du Conseil ou d'une décision déléguée à l'exécutif.
     Les virements entre chapitres nécessitent une DM votée en séance. Conserver les références de délibération dans ce registre pour le Compte Administratif.
   </div>
 </main>
 
+
 <!-- ══════════════════════════════════════
-     PAGE 4 — ALERTES
+     PAGE 4 — ALERTES (100% dynamique)
 ══════════════════════════════════════ -->
 <main class="page" id="page-alertes">
-
-  <div class="section-title">Dépassements budgétaires — Action immédiate requise</div>
-  <div class="alerts-grid" style="margin-bottom:24px">
-    <div class="alert-card">
-      <div class="alert-icon danger">!</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0191 — Conformité gaz <span class="priority high">Priorité 1</span></div>
-        <div class="alert-desc">Dépassement de <strong>–26 000 €</strong> sur un budget de 30 000 € (186,7% consommé — taux le plus élevé). 0K restant à engager. Origine à investiguer : erreur d'imputation probable. → Bloquer tout BC immédiatement et auditer les imputations comptables.</div>
-      </div>
-    </div>
-    <div class="alert-card">
-      <div class="alert-icon danger">!</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0186 — Maintenance équip. chaud/froid <span class="priority high">Priorité 1</span></div>
-        <div class="alert-desc">Dépassement de <strong>–71 000 €</strong> sur 307 700 € (123,1%). RAR estimé à 30K. 20K prévus transport/montage. → Initier DM en urgence. Confirmer le RAR exact pour le CA.</div>
-      </div>
-    </div>
-    <div class="alert-card">
-      <div class="alert-icon danger">!</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0084 — Entretien réparation bâtiment <span class="priority high">Priorité 2</span></div>
-        <div class="alert-desc">Dépassement de <strong>–12 683 €</strong> sur 100 000 €. RAR estimé à 21K (décapage, devis en attente). → Chiffrer précisément le RAR et décider si une DM est nécessaire avant fin septembre.</div>
-      </div>
-    </div>
-    <div class="alert-card">
-      <div class="alert-icon danger">!</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0086 — Maintenance écoles <span class="priority high">Priorité 2</span></div>
-        <div class="alert-desc">Dépassement de <strong>–6 000 €</strong> sur 40 000 € (après transfert –5K vers DEDU0123). RAR estimé à 16K. → Vérifier si un transfert de budget en provenance d'une ligne excédentaire est possible.</div>
-      </div>
+  <div id="alertes-container">
+    <div style="text-align:center;padding:40px;color:var(--text-faint);font-size:13px">
+      Chargement des alertes…
     </div>
   </div>
-
-  <div class="section-title">Points d'attention — Gel des BC et suivi renforcé</div>
-  <div class="alerts-grid" style="margin-bottom:24px">
-    <div class="alert-card">
-      <div class="alert-icon warn">!</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0100 — Matériels écoles <span class="priority med">Gel BC</span></div>
-        <div class="alert-desc">Budget quasi nul : <strong>226 € restants</strong> sur 180 000 €. Virement DSB de <strong>340 000 €</strong> en attente. Aucun engagement possible avant réception. → Relancer DSB formellement avec accusé de réception. Formaliser le blocage par écrit.</div>
-      </div>
-    </div>
-    <div class="alert-card">
-      <div class="alert-icon warn">~</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0195 — Équipements de cuisine <span class="priority med">Attention</span></div>
-        <div class="alert-desc">91,9% consommé (43 000 € restants). Seuil 90% atteint — seuil de gel BC approche. Demande BS +70K en cours. → Obtenir réponse du BS avant tout nouvel engagement. RAR à confirmer.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-title">Décisions modificatives en attente</div>
-  <div class="alerts-grid">
-    <div class="alert-card">
-      <div class="alert-icon info">i</div>
-      <div class="alert-body">
-        <div class="alert-title">DEDU0125 &amp; DEDU0195 — Demandes BS <span class="priority low">Suivi</span></div>
-        <div class="alert-desc">+60 000 € (mobilier) et +70 000 € (cuisine) soumis au Budget Supplémentaire. Total attendu : <strong>+130 000 €</strong>. → Obtenir un calendrier de vote et intégrer les montants en colonne DM dès validation.</div>
-      </div>
-    </div>
-    <div class="alert-card">
-      <div class="alert-icon info">i</div>
-      <div class="alert-body">
-        <div class="alert-title">RAR à consolider pour le Compte Administratif <span class="priority low">Avant 31/12</span></div>
-        <div class="alert-desc">RAR estimé total : <strong>132 000 €</strong>. Ces données doivent être finalisées et transmises au service comptable avant le 31 décembre pour la justification du CA. Vérifier ligne par ligne les engagements certains vs probables.</div>
-      </div>
-    </div>
-  </div>
-
 </main>
 
 <!-- ══════════════════════════════════════
@@ -577,12 +449,10 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
       <div class="guide-item"><span class="guide-num">Traçabilité</span><span class="guide-text"><strong>Format commentaire :</strong> «JJ/MM — Initiales : message». Conserver chaque DM dans l'onglet dédié avec référence de délibération.</span></div>
     </div>
     <div class="guide-section">
-      <div class="guide-header">04 · Actions urgentes immédiates</div>
-      <div class="guide-item"><span class="guide-num urg">Urgent</span><span class="guide-text"><strong>DEDU0191 :</strong> Auditer les imputations (186,7% — erreur probable). Bloquer tout BC. Décision sous 48h.</span></div>
-      <div class="guide-item"><span class="guide-num urg">Urgent</span><span class="guide-text"><strong>DEDU0186 :</strong> Initier DM pour –71 000 €. Confirmer RAR 30K pour CA. Vérifier les 20K transport/montage.</span></div>
-      <div class="guide-item"><span class="guide-num urg">Urgent</span><span class="guide-text"><strong>DEDU0100 :</strong> Relancer DSB pour le virement 340K€ avec accusé de réception écrit. Gel de tout BC.</span></div>
-      <div class="guide-item"><span class="guide-num" style="background:var(--warn-bg);color:var(--warn)">Court terme</span><span class="guide-text"><strong>DEDU0084/0086 :</strong> Chiffrer RAR précis et décider si DM avant fin septembre. Qualifier les 21K de décapage.</span></div>
-      <div class="guide-item"><span class="guide-num" style="background:var(--blue-bg);color:var(--blue)">Suivi</span><span class="guide-text"><strong>DEDU0125/0195 :</strong> Obtenir calendrier de vote du BS. Intégrer montants en col. F dès validation.</span></div>
+      <div class="guide-header">04 · Actions urgentes — mise à jour auto</div>
+      <div id="guide-urgences">
+        <div class="guide-item"><span class="guide-num">—</span><span class="guide-text" style="color:var(--text-faint)">Synchronisez pour afficher les actions urgentes en temps réel.</span></div>
+      </div>
     </div>
   </div>
 </main>
@@ -624,12 +494,14 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
   </div>
 </main>
 
-<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v3.7 · Exercice 2025 · Source : Google Sheets</footer>
+<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v4.0 · Exercice 2025 · Source : Google Sheets</footer>
 
 <script>
 // ─── CONFIG ────────────────────────────────────────────────
 const SHEET_ID = '1msn8oG-VcC9YH_sWxmeFgrQ_o34LzZcGUPTKn1yJ9EU';
 const SHEET_NAME = 'Suivi%20budg%C3%A9taire';
+const SHEET_GID  = '546412968';  // ID onglet Suivi budgétaire
+const SHEET_GID_DM = '1709530684'; // ID onglet Décisions modificatives
 const PCT_THEORIQUE = computePctTheorique();
 
 // Données initiales — valeurs réelles du Google Sheet (remplacées à chaque sync)
@@ -903,7 +775,7 @@ async function syncFromSheets() {
   btn.classList.add('loading');
   try {
     // Données : lignes 5→18, colonnes A→R (structure réelle du Sheets)
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}&range=A5:R18`;
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const csv = await res.text();
@@ -970,6 +842,9 @@ async function syncFromSheets() {
     updateBarChart();
     refreshKPIs();
     refreshTables();
+    buildAlertes();
+    buildActionsUrgentes();
+    syncDM();
     if (mmInitialized) refreshMindmap();
     updateLastSync();
     document.getElementById('majDate').textContent = new Date().toLocaleDateString('fr-FR');
@@ -1512,10 +1387,296 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && mmIsFullscreen) mmToggleFullscreen();
 });
 
+// ─── ALERTES DYNAMIQUES ───────────────────────────────────
+function buildAlertes() {
+  const container = document.getElementById('alertes-container');
+  if (!container) return;
+
+  const depasses   = DATA.filter(d => (d.bInit + d.dm - d.engage) < 0)
+                         .sort((a,b) => (a.bInit+a.dm-a.engage) - (b.bInit+b.dm-b.engage));
+  const critiques  = DATA.filter(d => {
+    const bdm = d.bInit+d.dm; const dispo = bdm - d.engage;
+    const pct = bdm > 0 ? d.engage/bdm : 0;
+    return dispo >= 0 && pct >= 0.90;
+  }).sort((a,b) => (b.engage/(b.bInit+b.dm||1)) - (a.engage/(a.bInit+a.dm||1)));
+  const attention  = DATA.filter(d => {
+    const bdm = d.bInit+d.dm; const dispo = bdm - d.engage;
+    const pct = bdm > 0 ? d.engage/bdm : 0;
+    return dispo >= 0 && pct >= 0.75 && pct < 0.90;
+  });
+  const avecRAR    = DATA.filter(d => d.rar > 0);
+  const totalRAR   = DATA.reduce((s,d) => s+d.rar, 0);
+
+  function alertCard(icon, iconCls, title, priorityLabel, priorityCls, desc) {
+    return `<div class="alert-card">
+      <div class="alert-icon ${iconCls}">${icon}</div>
+      <div class="alert-body">
+        <div class="alert-title">${title} <span class="priority ${priorityCls}">${priorityLabel}</span></div>
+        <div class="alert-desc">${desc}</div>
+      </div>
+    </div>`;
+  }
+
+  let html = '';
+
+  // ── Dépassements ───────────────────────────────────────
+  if (depasses.length > 0) {
+    html += `<div class="section-title">🔴 Dépassements budgétaires — Action immédiate requise</div>
+             <div class="alerts-grid" style="margin-bottom:24px">`;
+    depasses.forEach((d, i) => {
+      const bdm   = d.bInit + d.dm;
+      const dispo = bdm - d.engage;
+      const pct   = bdm > 0 ? (d.engage/bdm*100).toFixed(1) : '—';
+      const ecart = fmtEurFull(Math.abs(dispo));
+      const priorite = i === 0 ? 'Priorité 1' : 'Priorité 2';
+      const conseils = d.rar > 0
+        ? `RAR estimé à ${fmtEur(d.rar)}. Confirmer pour le Compte Administratif.`
+        : `Aucun RAR déclaré. Vérifier si des engagements restent à comptabiliser.`;
+      const alerte = d.comment ? `<em>${d.comment}</em> — ` : '';
+      html += alertCard('!', 'danger',
+        `${d.code} — ${d.label}`, priorite, 'high',
+        `${alerte}Dépassement de <strong>–${ecart}</strong> sur un budget de ${fmtEurFull(bdm)} (<strong>${pct}% consommé</strong>). ${conseils} → Initier une DM corrective en urgence.`
+      );
+    });
+    html += '</div>';
+  }
+
+  // ── Critiques ≥ 90% ────────────────────────────────────
+  if (critiques.length > 0) {
+    html += `<div class="section-title">🟠 Seuil critique — Gel des BC requis</div>
+             <div class="alerts-grid" style="margin-bottom:24px">`;
+    critiques.forEach(d => {
+      const bdm  = d.bInit + d.dm;
+      const dispo = bdm - d.engage;
+      const pct  = bdm > 0 ? (d.engage/bdm*100).toFixed(1) : '—';
+      const alerte = d.comment ? `<em>${d.comment}</em>. ` : '';
+      html += alertCard('!', 'danger',
+        `${d.code} — ${d.label}`, 'Gel BC', 'high',
+        `${alerte}<strong>${pct}%</strong> consommé — disponible restant : <strong>${fmtEurFull(dispo)}</strong>. Aucun nouveau BC sans validation de l'ordonnateur.${d.rar > 0 ? ` RAR : ${fmtEur(d.rar)}.` : ''}`
+      );
+    });
+    html += '</div>';
+  }
+
+  // ── Attention ≥ 75% ────────────────────────────────────
+  if (attention.length > 0) {
+    html += `<div class="section-title">🟡 Points d'attention — Suivi renforcé</div>
+             <div class="alerts-grid" style="margin-bottom:24px">`;
+    attention.forEach(d => {
+      const bdm  = d.bInit + d.dm;
+      const dispo = bdm - d.engage;
+      const pct  = bdm > 0 ? (d.engage/bdm*100).toFixed(1) : '—';
+      html += alertCard('~', 'warn',
+        `${d.code} — ${d.label}`, 'Attention', 'med',
+        `<strong>${pct}%</strong> consommé · Disponible : <strong>${fmtEurFull(dispo)}</strong>. Surveiller les prochains engagements. Seuil de gel BC à 90%.${d.rar > 0 ? ` RAR déclaré : ${fmtEur(d.rar)}.` : ''}`
+      );
+    });
+    html += '</div>';
+  }
+
+  // ── RAR à consolider ───────────────────────────────────
+  if (avecRAR.length > 0) {
+    html += `<div class="section-title">📋 Restes à réaliser (RAR) — Avant 31/12 pour le CA</div>
+             <div class="alerts-grid" style="margin-bottom:24px">`;
+    html += alertCard('i', 'info',
+      `${avecRAR.length} ligne(s) avec RAR déclaré`, 'Avant 31/12', 'low',
+      `RAR total estimé : <strong>${fmtEurFull(totalRAR)}</strong> sur ${avecRAR.length} ligne(s) : ${avecRAR.map(d => `${d.code} (${fmtEur(d.rar)})`).join(', ')}. Ces montants doivent être finalisés et transmis au service comptable pour la justification du Compte Administratif.`
+    );
+    html += '</div>';
+  }
+
+  // ── Aucune alerte ──────────────────────────────────────
+  if (depasses.length === 0 && critiques.length === 0 && attention.length === 0) {
+    html = `<div style="text-align:center;padding:60px 20px">
+      <div style="font-size:40px;margin-bottom:12px">✅</div>
+      <div style="font-family:var(--font-h);font-size:16px;font-weight:700;color:var(--ok-mid);margin-bottom:6px">Aucun dépassement ni seuil critique</div>
+      <div style="font-size:13px;color:var(--text-faint)">Toutes les lignes sont en dessous du seuil d'alerte de 75%.</div>
+    </div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Mettre à jour le badge count dans la nav
+  const badge = document.getElementById('alertCount');
+  if (badge) badge.textContent = depasses.length + critiques.length;
+}
+
+// ─── DM DYNAMIQUES depuis Sheets ──────────────────────────
+async function syncDM() {
+  const container = document.getElementById('dm-container');
+  const syncLabel = document.getElementById('dm-last-sync');
+  if (!container) return;
+
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID_DM}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const csv = await res.text();
+
+    function parseRow(row) {
+      const fields = []; let cur = '', inQ = false;
+      for (const ch of row) {
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { fields.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+      fields.push(cur.trim());
+      return fields;
+    }
+
+    const rows = csv.trim().split('\n').map(parseRow);
+    // Lignes de données : code DEDU en col 0
+    const dmRows = rows.filter(r => r[0] && /^DEDU\d+/.test(r[0]));
+
+    if (dmRows.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-faint);font-size:13px">
+        Aucune décision modificative enregistrée dans l'onglet Sheets.
+      </div>`;
+      return;
+    }
+
+    // Calculer total mouvements
+    const totalMvt = dmRows.reduce((s,r) => {
+      const v = parseFloat((r[4]||'').replace(/[^\d.,-]/g,'').replace(',','.'));
+      return s + (isNaN(v) ? 0 : v);
+    }, 0);
+
+    function dmTypeBadge(type) {
+      const t = (type||'').toLowerCase();
+      if (t.includes('sortant'))      return `<span class="sbadge warn">↑ Virement sortant</span>`;
+      if (t.includes('entrant'))      return `<span class="sbadge ok">↓ Virement entrant</span>`;
+      if (t.includes('supplémentaire') || t.includes('supplementaire')) return `<span class="sbadge info">+ Budget supplémentaire</span>`;
+      return `<span class="sbadge">${type}</span>`;
+    }
+    function statutBadge(s) {
+      const v = (s||'').toLowerCase();
+      if (v.includes('valid'))   return `<span class="sbadge ok"><span class="dot ok"></span>Validé</span>`;
+      if (v.includes('attente')) return `<span class="sbadge warn"><span class="dot warn"></span>En attente</span>`;
+      if (v.includes('refus'))   return `<span class="sbadge danger"><span class="dot danger"></span>Refusé</span>`;
+      return `<span class="sbadge">${s}</span>`;
+    }
+    function dateColor(d) {
+      return (d||'').toLowerCase().includes('attente')
+        ? 'style="color:var(--warn-mid)"' : '';
+    }
+
+    let bodyRows = dmRows.map((r, i) => {
+      const montant = r[4] || '—';
+      const isNeg = montant.includes('-') || (r[3]||'').toLowerCase().includes('sortant');
+      const montantCls = isNeg ? 'num neg' : 'num ok';
+      const bg = i % 2 === 1 ? 'style="background:#f8f6f2"' : '';
+      return `<tr ${bg}>
+        <td><span class="code">${r[0]}</span></td>
+        <td style="font-family:var(--font-m);font-size:11px" ${dateColor(r[1])}>${r[1]||'—'}</td>
+        <td style="font-size:11px">${r[2]||'—'}</td>
+        <td>${dmTypeBadge(r[3])}</td>
+        <td class="${montantCls}">${montant}</td>
+        <td style="font-size:11px;color:var(--text-muted)">${r[5]||'—'}</td>
+        <td style="font-size:11px">${r[6]||'—'}</td>
+        <td>${statutBadge(r[7])}</td>
+      </tr>`;
+    }).join('');
+
+    // Ligne total
+    const nbValidees  = dmRows.filter(r => (r[7]||'').toLowerCase().includes('valid')).length;
+    const nbAttente   = dmRows.filter(r => (r[7]||'').toLowerCase().includes('attente')).length;
+
+    container.innerHTML = `
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div class="kpi" style="flex:1;min-width:130px;border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 16px">
+          <div class="kpi-label">Total mouvements</div>
+          <div class="kpi-val blue" style="font-size:18px">${dmRows.length}</div>
+        </div>
+        <div class="kpi" style="flex:1;min-width:130px;border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 16px">
+          <div class="kpi-label">Validées</div>
+          <div class="kpi-val ok" style="font-size:18px">${nbValidees}</div>
+        </div>
+        <div class="kpi" style="flex:1;min-width:130px;border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 16px">
+          <div class="kpi-label">En attente</div>
+          <div class="kpi-val warn" style="font-size:18px">${nbAttente}</div>
+        </div>
+      </div>
+      <div class="dm-table-wrap">
+        <table>
+          <thead><tr>
+            <th>Code</th><th>Date DM</th><th>Référence</th>
+            <th>Type</th><th style="text-align:right">Montant</th>
+            <th>Motif</th><th>Validé par</th><th>Statut</th>
+          </tr></thead>
+          <tbody>${bodyRows}</tbody>
+          <tfoot><tr style="background:var(--surface2)">
+            <td colspan="4" style="font-size:12px;font-weight:600;padding:9px 12px">TOTAL MOUVEMENTS</td>
+            <td class="num blue" style="font-weight:600">${dmRows.length} ligne(s)</td>
+            <td colspan="3"></td>
+          </tr></tfoot>
+        </table>
+      </div>`;
+
+    if (syncLabel) syncLabel.textContent = 'Sync ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+
+  } catch(e) {
+    console.error('DM sync error:', e);
+    container.innerHTML = `<div style="padding:20px;color:var(--danger-mid);font-size:13px">
+      Impossible de charger les DM : ${e.message}
+    </div>`;
+  }
+}
+
+// ─── ACTIONS URGENTES DYNAMIQUES (guide) ──────────────────
+function buildActionsUrgentes() {
+  const container = document.getElementById('guide-urgences');
+  if (!container) return;
+
+  const urgents  = DATA.filter(d => (d.bInit+d.dm-d.engage) < 0 || (d.bInit+d.dm > 0 && d.engage/(d.bInit+d.dm) >= 0.99));
+  const attention = DATA.filter(d => {
+    const bdm = d.bInit+d.dm; const pct = bdm>0 ? d.engage/bdm : 0;
+    return pct >= 0.90 && pct < 0.99 && bdm-d.engage >= 0;
+  });
+  const suivi    = DATA.filter(d => {
+    const bdm = d.bInit+d.dm; const pct = bdm>0 ? d.engage/bdm : 0;
+    return pct >= 0.75 && pct < 0.90;
+  });
+
+  let items = '';
+  urgents.forEach(d => {
+    const bdm = d.bInit+d.dm;
+    const dispo = bdm - d.engage;
+    items += `<div class="guide-item">
+      <span class="guide-num urg">Urgent</span>
+      <span class="guide-text"><strong>${d.code} :</strong> ${dispo < 0 ? `Dépassement de ${fmtEurFull(Math.abs(dispo))}` : `${(d.engage/bdm*100).toFixed(0)}% consommé`} — ${d.label}. ${d.comment || 'Vérifier et initier DM si nécessaire.'}${d.rar > 0 ? ` RAR : ${fmtEur(d.rar)}.` : ''}</span>
+    </div>`;
+  });
+  attention.forEach(d => {
+    const bdm = d.bInit+d.dm;
+    items += `<div class="guide-item">
+      <span class="guide-num" style="background:var(--warn-bg);color:var(--warn)">Court terme</span>
+      <span class="guide-text"><strong>${d.code} :</strong> ${(d.engage/bdm*100).toFixed(0)}% consommé · Dispo ${fmtEurFull(bdm-d.engage)} — ${d.label}. Gel BC requis. ${d.comment || ''}</span>
+    </div>`;
+  });
+  suivi.forEach(d => {
+    const bdm = d.bInit+d.dm;
+    items += `<div class="guide-item">
+      <span class="guide-num" style="background:var(--blue-bg);color:var(--blue)">Suivi</span>
+      <span class="guide-text"><strong>${d.code} :</strong> ${(d.engage/bdm*100).toFixed(0)}% consommé · ${d.label}. Surveiller les prochains engagements.</span>
+    </div>`;
+  });
+
+  if (!items) {
+    items = `<div class="guide-item">
+      <span class="guide-num" style="background:var(--ok-bg);color:var(--ok)">✓ OK</span>
+      <span class="guide-text">Aucune ligne en situation critique. Toutes les lignes sont en dessous du seuil d'alerte de 75%.</span>
+    </div>`;
+  }
+  container.innerHTML = items;
+}
+
 // ─── INIT ─────────────────────────────────────────────────
 initCadrage();
 refreshTables();
 refreshKPIs();
+buildAlertes();
+buildActionsUrgentes();
+syncDM();
 </script>
 
 </body>
