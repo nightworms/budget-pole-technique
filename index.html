@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pôle Technique — Suivi Budgétaire v4.0</title>
+<title>Pôle Technique — Suivi Budgétaire v4.1</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -204,7 +205,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
 
 <header class="site-header">
   <div class="header-brand">
-    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v4.0</span></h1>
+    <h1>Pôle Technique — Suivi Budgétaire <span style="font-size:11px;opacity:.5;font-weight:400">v4.1</span></h1>
     <p>DIRECTION DES ÉQUIPEMENTS &amp; DES UNITÉS · DEDU / DRMU · Exercice 2025</p>
   </div>
   <div class="header-right">
@@ -494,7 +495,7 @@ footer{text-align:center;padding:20px 32px;font-family:var(--font-m);font-size:1
   </div>
 </main>
 
-<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v4.0 · Exercice 2025 · Source : Google Sheets</footer>
+<footer>Pôle Technique — Suivi Budgétaire Prévisionnel v4.1 · Exercice 2025 · Source : Google Sheets</footer>
 
 <script>
 // ─── CONFIG ────────────────────────────────────────────────
@@ -775,8 +776,8 @@ async function syncFromSheets() {
   btn.classList.add('loading');
   try {
     // Données : lignes 5→18, colonnes A→R (structure réelle du Sheets)
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
-    const res = await fetch(url);
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}&t=${Date.now()}`;
+    const res = await fetch(url, {cache: 'no-store'});
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const csv = await res.text();
 
@@ -1508,8 +1509,8 @@ async function syncDM() {
   if (!container) return;
 
   try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID_DM}`;
-    const res = await fetch(url);
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID_DM}&t=${Date.now()}`;
+    const res = await fetch(url, {cache: 'no-store'});
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const csv = await res.text();
 
@@ -1526,7 +1527,9 @@ async function syncDM() {
 
     const rows = csv.trim().split('\n').map(parseRow);
     // Lignes de données : code DEDU en col 0
-    const dmRows = rows.filter(r => r[0] && /^DEDU\d+/.test(r[0]));
+    // Accepter toute ligne avec une valeur en col A, sauf les en-têtes et totaux
+    const SKIP = /^(n°|code|total|suivi|ce registre)/i;
+    const dmRows = rows.filter(r => r[0] && r[0].trim() !== '' && !SKIP.test(r[0].trim()));
 
     if (dmRows.length === 0) {
       container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-faint);font-size:13px">
